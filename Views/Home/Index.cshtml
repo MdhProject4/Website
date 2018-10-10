@@ -2,4 +2,29 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1> Welcome </h1>
+<div id="mapContainer">
+	<button id="btnUser" class="button">
+		<img src="img/account.svg"/>
+	</button>
+	<dív id="map"></dív>
+</div>
+
+<script>
+	let map, places
+
+	function loadMap()
+	{
+		console.log("Loading map...")
+
+		map = new google.maps.Map(window.map,
+			{
+				center: {
+					lat: 59.618706,
+					lng: 16.540438
+				},
+				zoom: 8
+			})
+	}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkpoZuz2_DLFR81ISUwOcIXcLj_4097gY&libraries=places&callback=loadMap" async defer></script>
