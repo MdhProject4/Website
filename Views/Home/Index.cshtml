@@ -52,6 +52,7 @@
 
 <script>
 	let map, places
+	let planes = []
 
 	function loadMap()
 	{
@@ -64,6 +65,31 @@
 				},
 				zoom: 8
 			})
+
+		addPlane(59.618706, 16.540438)
+	}
+
+	// Adds a plane and draws it on the map
+	function addPlane(lat, long)
+	{
+		planes.push(new google.maps.Marker({
+			position: {
+				lat: lat,
+				lng: long
+			},
+			map: map,
+			title: "Test Title",
+			icon: "img/airplane.png"
+		}))
+	}
+
+	// Removes all planes known
+	function removePlanes()
+	{
+		// Remove all planes from the map
+		planes.forEach(plane => plane.setMap(null))
+		// Empty the planes array
+		planes.length = 0
 	}
 
 	// Shows or hides the login dialog
