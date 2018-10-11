@@ -7,6 +7,7 @@
 		<div id="btnUserIcon" onclick="showLogin(true)">
 			<img src="img/account.svg">
 		</div>
+		<div id="btnUserError"> ¯\_(ツ)_/¯ </div>
 		<div id="btnUserLogin">
 			<table>
 				<tr>
@@ -18,9 +19,31 @@
 					<td><input type="password"></td>
 				</tr>
 			</table>
+			<span class="btnUserOption" onclick="showRegister(true)">No account? Create one!</span>
 			<div class="buttonContainer">
 				<div class="button" onclick="showLogin(false)">Cancel</div>
-				<div class="button">Login</div>
+				<div class="button" onclick="showLoginError('Login doesn\'t work yet :c')">Login</div>
+			</div>
+		</div>
+		<div id="btnUserRegister">
+			<table>
+				<tr>
+					<td>Username</td>
+					<td><input type="text"></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password"></td>
+				</tr>
+				<tr>
+					<td>Email (optional)</td>
+					<td><input type="text"></td>
+				</tr>
+			</table>
+			<span class="btnUserOption" onclick="showRegister(false)">Have an account? Login!</span>
+			<div class="buttonContainer">
+				<div class="button" onclick="showLogin(false)">Cancel</div>
+				<div class="button" onclick="showLoginError('Register doesn\'t work either :c')">Register</div>
 			</div>
 		</div>
 	</div>
@@ -43,8 +66,15 @@
 			})
 	}
 
+	// Shows or hides the login dialog
 	function showLogin(show)
 	{
+		// Default back to login
+		showRegister(false)
+
+		// Hide error if any
+		window.btnUserError.style.transform = "translate(0, -100%)"
+
 		window.btnUserIcon.style.opacity = show ? 0 : 1
 		window.btnUserLogin.style.transform = show ? "scale(1, 1)" : "scale(0, 0)"
 
@@ -53,9 +83,31 @@
 		style.top    = show ? "50%"   : "52px"
 		style.right  = show ? "50%"   : "0"
 		style.width  = show ? "380px" : "40px"
-		style.height = show ? "190px" : "40px"
+		style.height = show ? "200px" : "40px"
 		style.transform    = show ? "translate(50%, -50%)" : "translate(0, 0)"
 		style.borderRadius = show ? "4px" : "2px"
+	}
+
+	// Shows the register or login dialog
+	function showRegister(show)
+	{
+		window.btnUserLogin.style.transform    = show ? "scale(0, 0)" : "scale(1, 1)"
+		window.btnUserRegister.style.transform = show ? "scale(1, 1)" : "scale(0, 0)"
+
+		window.btnUser.style.height = show ? "240px" : "200px"
+	}
+
+	// Show error to login/register dialog
+	function showLoginError(message)
+	{
+		window.btnUserError.textContent = message
+		window.btnUserError.style.transform = "translate(0, 0)"
+
+		// Automatically hide error after 3 seconds
+		setTimeout(() =>
+		{
+			window.btnUserError.style.transform = "translate(0, -100%)"
+		}, 3000)
 	}
 </script>
 

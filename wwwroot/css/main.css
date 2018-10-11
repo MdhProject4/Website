@@ -1,12 +1,12 @@
-﻿body {
+﻿/* Generic body stuff, including a dark background because I like my eyes */
+body {
 	background-image: linear-gradient(135deg, #201e44, #131c26);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	font-family: sans-serif;
 	color: black;
 }
-
-/* Basically just a copy of Google Maps' buttons */
+ /* Google Maps styled buttons */
 .control {
 	background-color: white;
 	border: 0;
@@ -23,50 +23,76 @@
 	z-index: 5;
 	transition: all 0.75s ease-in-out;
 }
-
 .control img {
 	width: 18px;
 	height: 18px;
 	margin: 11px;
 }
 
+/* Button for opening the login page and the dialog itself*/
 #btnUser {
 	right: 0;
 	top: 52px;
 	cursor: auto;
 }
-
-#btnUserLogin {
+/* The login part of the dialog */
+#btnUserLogin, #btnUserRegister {
+	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	width: 100%;
 	transform: scale(0, 0);
 	transition: all 0.75s ease-in-out;
 }
-
+/* To show login/register errors */
+#btnUserError {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background-color: #d32f2f;
+	color: white;
+	text-align: center;
+	padding: 6px;
+	box-sizing: border-box;
+	transform: translate(0, -100%);
+	transition: all 0.5s ease-in-out;
+}
+/* The user icon */
 #btnUserIcon {
 	width: 40px;
 	height: 40px;
 	cursor: pointer;
 	transition: all 0.75s ease-in-out;
 }
-
 #btnUser td {
 	padding: 4px;
 }
-
+/* Custom Google inspired input styles */
 #btnUser input[type="text"], #btnUser input[type="password"] {
 	background-color: rgba(0, 0, 0, 0);
 	border: 0;
 	border-bottom: 2px solid rgba(100, 100, 100, 0.6);
 	margin-left: 16px;
 }
-
+/* Button container for cancel and login/register etc. */
 #btnUser .buttonContainer {
+	/* Dialogs usually have the buttons on the right */
 	margin: 8px 8px 0 0;
 	align-self: flex-end;
 }
 
+/* Text/button to switch from login to register */
+#btnUser .btnUserOption {
+	padding-top: 8px;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+#btnUser .btnUserOption:hover {
+	text-decoration: underline;
+}
+
+/* Main main being replaced by Google Maps iframe */
 #mapContainer, #map {
 	position: absolute;
 	width: 100%;
@@ -75,11 +101,13 @@
 	left: 0;
 }
 
+/* Generic class for button collections */
 .buttonContainer {
 	display: flex;
 	flex-direction: row;
 }
 
+/* Generig class for button style */
 .button {
 	font-weight: bold;
 	text-align: center;
@@ -93,7 +121,6 @@
 	min-width: 100px;
 	color: #1976d2;
 }
-
 .button:hover {
 	background-color: rgba(207, 216, 220, 0.25);
 }
