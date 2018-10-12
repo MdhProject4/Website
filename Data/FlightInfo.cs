@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using ProjectFlight.Enums;
 
 namespace ProjectFlight.Data
@@ -9,121 +10,144 @@ namespace ProjectFlight.Data
 	public class FlightInfo
 	{
 		/// <summary>
+		/// Internal ID used by the database, primary key
+		/// </summary>
+		[Key]
+		[MaxLength(8)]
+		public string Id { get; set; }
+
+		/// <summary>
 		/// Identifier broadcast by the aircraft
 		/// </summary>
-		public readonly string Identifier;
+		[MaxLength(6)]
+		public string Identifier { get; set; }
 
 		/// <summary>
 		/// Aircraft registration number
 		/// </summary>
-		public readonly string RegistrationNumber;
+		// TODO: Unknown length
+		public string RegistrationNumber { get; set; }
 
 		/// <summary>
 		/// First seen
 		/// </summary>
-		public readonly DateTime FirstSeen;
+		public DateTime FirstSeen { get; set; }
 
 		/// <summary>
 		/// Time the aircraft has been tracked for
 		/// </summary>
-		public readonly TimeSpan Tracked;
+		public TimeSpan Tracked { get; set; }
 
 		/// <summary>
 		/// Latitude over the ground
 		/// </summary>
-		public readonly float Latitude;
+		public float Latitude { get; set; }
 
 		/// <summary>
 		/// Longitude over the ground
 		/// </summary>
-		public readonly float Longitude;
+		public float Longitude { get; set; }
 
 		/// <summary>
 		/// Time position was last reported
 		/// </summary>
-		public readonly DateTime LastUpdate;
+		public DateTime LastUpdate { get; set; }
 
 		/// <summary>
 		/// Speed in knots
 		/// </summary>
 		// TODO: Convert this to something useful
-		public readonly float Speed;
+		public float Speed { get; set; }
 
 		/// <summary>
 		/// Speed type
 		/// </summary>
-		public readonly ESpeedType SpeedType;
+		public ESpeedType SpeedType { get; set; }
 
 		/// <summary>
 		/// Angle clockwise in degrees
 		/// </summary>
-		public readonly float Angle;
+		public float Angle { get; set; }
 
 		/// <summary>
 		/// Aircraft's model
 		/// </summary>
-		public readonly string Model;
+		// TODO: Unknown length
+		public string Model { get; set; }
 
 		/// <summary>
 		/// Description of aircraft's model
 		/// </summary>
-		public readonly string ModelDescription;
+		// TODO: Unknown length
+		public string ModelDescription { get; set; }
 
 		/// <summary>
 		/// Manufacturer's name
 		/// </summary>
-		public readonly string Manufacturer;
+		// TODO: Unknown length
+		public string Manufacturer { get; set; }
 
 		/// <summary>
 		/// Year manufactured
 		/// </summary>
-		public readonly int Year;
+		public short Year { get; set; }
 
 		/// <summary>
 		/// Name of aircraft's operator
 		/// </summary>
-		public readonly string Operator;
+		// TODO: Unknown length
+		public string Operator { get; set; }
 
 		/// <summary>
 		/// Vertical speed in feet per minute
 		/// </summary>
 		// TODO: Convert this to something useful
-		public readonly int VerticalSpeed;
+		public int VerticalSpeed { get; set; }
 
 		/// <summary>
 		/// Aircraft type
 		/// </summary>
-		public readonly EAircraftType Type;
+		public EAircraftType Type { get; set; }
 
 		/// <summary>
 		/// Code and name of departure airport
 		/// </summary>
-		public readonly string Departure;
+		// TODO: Unknown length
+		public string Departure { get; set; }
 
 		/// <summary>
 		/// Code and name of destination airport
 		/// </summary>
-		public readonly string Destination;
+		// TODO: Unknown length
+		public string Destination { get; set; }
 
 		/// <summary>
 		/// If the aircraft is grounded
 		/// </summary>
-		public readonly bool Grounded;
+		public bool Grounded { get; set; }
 
 		/// <summary>
 		/// Call sign of the aircraft
 		/// </summary>
-		public readonly string CallSign;
+		// TODO: Unknown length
+		public string CallSign { get; set; }
 
 		/// <summary>
 		/// If the aircraft has a pic
 		/// </summary>
-		public readonly bool HasPicture;
+		public bool HasPicture { get; set; }
 
 		/// <summary>
 		/// Number of flights recorded
 		/// </summary>
-		public readonly int FlightsCount;
+		public int FlightsCount { get; set; }
+
+		/// <summary>
+		/// Default constructor used by database creation
+		/// </summary>
+		public FlightInfo()
+		{
+		}
 
 		/// <summary>
 		/// Constructs from a <see cref="FlightInfoResponse"/>

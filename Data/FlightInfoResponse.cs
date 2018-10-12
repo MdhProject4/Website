@@ -73,7 +73,7 @@
 		/// <summary>
 		/// Year manufactured
 		/// </summary>
-		public readonly int Year;
+		public readonly short Year;
 
 		/// <summary>
 		/// Name of aircraft's operator

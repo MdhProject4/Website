@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectFlight.Data;
 
 namespace ProjectFlight.Controllers
 {
 	public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+	{
+		private ApplicationDbContext context;
+
+	    public HomeController(ApplicationDbContext context) => 
+		    this.context = context;
+
+		public IActionResult Index() => 
+			View();
+	}
 }

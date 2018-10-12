@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFlight.Data;
 
 namespace ProjectFlight
 {
@@ -23,8 +26,12 @@ namespace ProjectFlight
 		        options.CheckConsentNeeded = context => true;
 		        options.MinimumSameSitePolicy = SameSiteMode.None;
 	        });
-			
-	        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+			// Add ApplicationDbContext to dependency injection (or in english: setup SQL)
+	        services.AddDbContext<ApplicationDbContext>(options =>
+		        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
