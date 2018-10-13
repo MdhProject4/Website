@@ -9,8 +9,12 @@ namespace ProjectFlight.Data
 	{
 		public DbSet<FlightInfo> FlightInfos { get; set; }
 
-		public ApplicationDbContext(DbContextOptions options) : base(options)
+		public static string ConnectionString { private get; set; }
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+			base.OnConfiguring(optionsBuilder);
+			optionsBuilder.UseSqlServer(ConnectionString);
 		}
 	}
 }

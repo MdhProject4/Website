@@ -3,121 +3,122 @@
 	/// <summary>
 	/// Represents the response from the flight tracking API
 	/// </summary>
-	public struct FlightInfoResponse
+	// TODO: Remove this class
+	public class FlightInfoResponse
 	{
 		/// <summary>
 		/// Identifier broadcast by the aircraft
 		/// </summary>
-		public readonly string Icao;
+		public string Icao;
 
 		/// <summary>
 		/// Aircraft registration number
 		/// </summary>
-		public readonly string Reg;
+		public string Reg;
 
 		/// <summary>
 		/// First seen
 		/// </summary>
-		public readonly string Fseen;
+		public string Fseen;
 
 		/// <summary>
 		/// Seconds the aircraft has been tracked for
 		/// </summary>
-		public readonly int Tsecs;
+		public int Tsecs;
 
 		/// <summary>
 		/// Latitude over the ground
 		/// </summary>
-		public readonly float Lat;
+		public float Lat;
 
 		/// <summary>
 		/// Longitude over the ground
 		/// </summary>
-		public readonly float Long;
+		public float Long;
 
 		/// <summary>
 		/// Time position was last reported
 		/// </summary>
-		public readonly int PosTime;
+		public long PosTime;
 
 		/// <summary>
 		/// Speed in knots
 		/// </summary>
-		public readonly float Spd;
+		public float Spd;
 
 		/// <summary>
 		/// Speed type
 		/// </summary>
-		public readonly int SpdTyp;
+		public int SpdTyp;
 
 		/// <summary>
 		/// Angle clockwise in degrees
 		/// </summary>
-		public readonly float Trak;
+		public float Trak;
 
 		/// <summary>
 		/// Aircraft's model
 		/// </summary>
-		public readonly string Type;
+		public string Type;
 
 		/// <summary>
 		/// Description of aircraft's model
 		/// </summary>
-		public readonly string Mdl;
+		public string Mdl;
 
 		/// <summary>
 		/// Manufacturer's name
 		/// </summary>
-		public readonly string Man;
+		public string Man;
 
 		/// <summary>
 		/// Year manufactured
 		/// </summary>
-		public readonly short Year;
+		public string Year;
 
 		/// <summary>
 		/// Name of aircraft's operator
 		/// </summary>
-		public readonly string Op;
+		public string Op;
 
 		/// <summary>
 		/// Vertical speed in feet per minute
 		/// </summary>
-		public readonly int Vsi;
+		public int Vsi;
 
 		/// <summary>
 		/// Aircraft type
 		/// </summary>
-		public readonly int Species;
+		public int Species;
 
 		/// <summary>
 		/// Code and name of departure airport
 		/// </summary>
-		public readonly string From;
+		public string From;
 
 		/// <summary>
 		/// Code and name of destination airport
 		/// </summary>
-		public readonly string To;
+		public string To;
 
 		/// <summary>
 		/// If the aircraft is grounded
 		/// </summary>
-		public readonly bool Gnd;
+		public bool Gnd;
 
 		/// <summary>
 		/// Call sign of the aircraft
 		/// </summary>
-		public readonly string Call;
+		public string Call;
 
 		/// <summary>
 		/// If the aircraft has a pic
 		/// </summary>
-		public readonly bool HasPic;
+		public bool HasPic;
 
 		/// <summary>
 		/// Number of flights recorded
 		/// </summary>
-		public readonly int FlightsCount;
+		public int FlightsCount;
 	}
 }
