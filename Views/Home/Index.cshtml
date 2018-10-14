@@ -142,6 +142,12 @@
 			window.btnUserError.style.transform = "translate(0, -100%)"
 		}, 3000)
 	}
+
+	// Hide any dialogs when clicking/dragging the map
+	window.map.addEventListener("mousedown", () => {
+		// Hide login dialog
+		showLogin(false)
+	})
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkpoZuz2_DLFR81ISUwOcIXcLj_4097gY&libraries=places&callback=loadMap" async defer></script>
