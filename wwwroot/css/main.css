@@ -23,7 +23,7 @@ body {
 	z-index: 5;
 	transition: all 0.75s ease-in-out;
 }
-.control img {
+.control svg {
 	width: 18px;
 	height: 18px;
 	margin: 11px;
