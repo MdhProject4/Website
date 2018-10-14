@@ -15,7 +15,7 @@ namespace ProjectFlight.Controllers
 	    /// <param name="inAir">Only show flights who are currently in the air</param>
 	    /// <param name="today">Only show flights that was added in the last 24 hours</param>
 	    /// <param name="query">Only show flights matching the query for departure or destination location</param>
-	    /// <returns></returns>
+	    /// <returns><see cref="JsonResult"/> of all results</returns>
 	    public IActionResult GetFlights(bool depDest = false, bool inAir = false, bool today = false, string query = null)
         {
 			// First get all values
@@ -44,5 +44,27 @@ namespace ProjectFlight.Controllers
 
 	        return new JsonResult(flights);
         }
+
+		/// <summary>
+		/// Gets a specific flight
+		/// </summary>
+		/// <param name="id">ID to get flight of</param>
+		/// <returns><see cref="JsonResult"/> of error and info</returns>
+	    public IActionResult GetFlight(string id)
+		{
+			// Temporary variable
+			FlightInfo info;
+
+			// Try to find flight
+			using (var context = new ApplicationDbContext())
+				info = context.FlightInfos.FirstOrDefault(f => f.Id == id);
+
+			// Check if it was found (not null)
+			return new JsonResult(new
+			{
+				error = info == null,
+				info
+			});
+		}
 	}
 }
