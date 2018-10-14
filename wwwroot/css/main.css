@@ -71,6 +71,7 @@ body {
 /* Custom Google inspired input styles */
 #btnUser input[type="text"], #btnUser input[type="password"] {
 	background-color: rgba(0, 0, 0, 0);
+	color: black;
 	border: 0;
 	border-bottom: 2px solid rgba(100, 100, 100, 0.6);
 	margin-left: 16px;
