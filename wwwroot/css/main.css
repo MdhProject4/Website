@@ -69,7 +69,7 @@ body {
 	padding: 4px;
 }
 /* Custom Google inspired input styles */
-#btnUser input[type="text"], #btnUser input[type="password"] {
+#btnUser input[type="text"], #btnUser input[type="password"], #btnUser input[type="email"] {
 	background-color: rgba(0, 0, 0, 0);
 	color: black;
 	border: 0;
