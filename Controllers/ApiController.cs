@@ -14,9 +14,10 @@ namespace ProjectFlight.Controllers
 	    /// <param name="depDest">Only show flights who have a known departure and destination</param>
 	    /// <param name="inAir">Only show flights who are currently in the air</param>
 	    /// <param name="today">Only show flights that was added in the last 24 hours</param>
+	    /// <param name="limit">Maximum number of results returned</param>
 	    /// <param name="query">Only show flights matching the query for departure or destination location</param>
 	    /// <returns><see cref="JsonResult"/> of all results</returns>
-	    public IActionResult GetFlights(bool depDest = false, bool inAir = false, bool today = false, string query = null)
+	    public IActionResult GetFlights(bool depDest = false, bool inAir = false, bool today = false, int limit = 1000, string query = null)
         {
 			// First get all values
 	        IEnumerable<FlightInfo> flights;
@@ -42,7 +43,7 @@ namespace ProjectFlight.Controllers
 			        (f.Departure?.ToLower().Contains(query) ?? false) || (f.Destination?.ToLower().Contains(query) ?? false));
 	        }
 
-	        return new JsonResult(flights);
+	        return new JsonResult(flights.Take(limit));
         }
 
 		/// <summary>
