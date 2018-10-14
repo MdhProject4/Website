@@ -73,11 +73,11 @@
 				zoom: 8
 			})
 
-		addPlane(59.618706, 16.540438)
+		getFlights()
 	}
 
 	// Adds a plane and draws it on the map
-	function addPlane(lat, long)
+	function addPlane(lat, long, angle)
 	{
 		planes.push(new google.maps.Marker({
 			position: {
@@ -85,8 +85,15 @@
 				lng: long
 			},
 			map: map,
-			title: "Test Title",
-			icon: "img/airplane.png"
+			icon: {
+				path: "M21,16V14L13,9V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V9L2,14V16L10,13.5V19L8,20.5V22L11.5,21L15,22V20.5L13,19V13.5L21,16Z",
+				scale: 1.5,
+				fillColor: "#ffffff",
+				fillOpacity: 1,
+				strokeColor: "#000000",
+				strokeWeight: 1,
+				rotation: angle
+			}
 		}))
 	}
 
@@ -148,6 +155,17 @@
 		// Hide login dialog
 		showLogin(false)
 	})
+</script>
+
+<script>
+	// When loading the map, fetch all current flights
+	function getFlights()
+	{
+		// TODO: For now, default to displaying 50 flights
+		fetch("/api/getFlights?limit=50")
+			.then(response => response.json())
+			.then(json => json.forEach(item => addPlane(item.latitude, item.longitude, item.angle)))
+	}
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkpoZuz2_DLFR81ISUwOcIXcLj_4097gY&libraries=places&callback=loadMap" async defer></script>
