@@ -36,21 +36,21 @@
 			<table>
 				<tr>
 					<td>Username</td>
-					<td><input type="text"></td>
+					<td><input id="registerUserName" type="text"></td>
 				</tr>
 				<tr>
 					<td>Password</td>
-					<td><input type="password"></td>
+					<td><input id="registerPassword" type="password"></td>
 				</tr>
 				<tr>
 					<td>Email (optional)</td>
-					<td><input type="email"></td>
+					<td><input id="registerMail" type="email"></td>
 				</tr>
 			</table>
 			<span class="btnUserOption" onclick="showRegister(false)">Have an account? Login!</span>
 			<div class="buttonContainer">
 				<div class="button" onclick="showLogin(false)">Cancel</div>
-				<div class="button" onclick="showLoginError('Register doesn\'t work either :c')">Register</div>
+				<div class="button" onclick="register()">Register</div>
 			</div>
 		</div>
 	</div>
@@ -127,7 +127,27 @@
 		style.height = show ? "200px" : "40px"
 		style.transform    = show ? "translate(50%, -50%)" : "translate(0, 0)"
 		style.borderRadius = show ? "4px" : "2px"
-	}
+    }
+
+    function register()
+    {
+        const username = registerUserName.value
+        const password = registerPassword.value
+        const email = registerMail.value 
+        if (!username) {
+            showLoginError("Username needs to be set")
+            return
+        }
+        if (!password) {
+            showLoginError("Password missing")
+        }
+        fetch( `/api/Register?username=${username}&password=${password}&email=${email}`)
+    }
+
+    function login()
+    {
+
+    }
 
 	// Shows the register or login dialog
 	function showRegister(show)
