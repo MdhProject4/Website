@@ -1,31 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectFlight.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ProjectFlight.Controllers
 {
+	/// <summary>
+	/// Controller to handle user related feature
+	/// </summary>
+	// TODO: Get context instead of creating each time
 	public class UserController : Controller
     {
-        public IActionResult Login(string username, string password)
+		#region Helpers
+
+	    private static JsonResult GetResult(bool error) => new JsonResult(new { error });
+
+	    private static string HashPassword(string password)
+	    {
+		    // Create builder for the string
+		    var builder = new StringBuilder();
+
+		    // Loop through byte array and convert to (hex) string
+		    foreach (var b in Hash(password))
+			    builder.Append(b.ToString("x2"));
+
+		    // Return built string
+		    return builder.ToString();
+	    }
+
+	    private static IEnumerable<byte> Hash(string input)
+	    {
+		    // Convert input to byte array and hash it
+		    using (var sha = SHA256.Create())
+			    return sha.ComputeHash(Encoding.UTF8.GetBytes(input));
+	    }
+
+		#endregion
+
+		public IActionResult Login(string username, string password)
         {
-			// TODO
-            throw new NotImplementedException();
+	        // Check if any parameter is missing
+	        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+		        return GetResult(true);
+
+			// Hash entered password
+	        var hashedPassword = HashPassword(password);
+
+			// See if it's found in the database
+	        bool found;
+	        using (var context = new ApplicationDbContext())
+		        found = context.Users.Any(u => u.Username == username && u.Password == hashedPassword);
+
+			// TODO: For now, return result without saving login in cookie
+	        return GetResult(!found);
         }
 
         public IActionResult Register(string username, string password, string email)
         {
 			// Check if any parameter is missing
 			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-				return new JsonResult(new
-				{
-					error = true
-				});
+				return GetResult(true);
 
 			// User we're adding
 			var user = new User
@@ -52,30 +88,7 @@ namespace ProjectFlight.Controllers
             }
 
 			// Return json result of error
-            return new JsonResult(new
-            {
-                error
-            });
+            return GetResult(error);
         }
-
-	    private static string HashPassword(string password)
-	    {
-			// Create builder for the string
-		    var builder = new StringBuilder();
-
-			// Loop through byte array and convert to (hex) string
-		    foreach (var b in Hash(password))
-			    builder.Append(b.ToString("x2"));
-
-			// Return built string
-		    return builder.ToString();
-	    }
-
-	    private static IEnumerable<byte> Hash(string input)
-	    {
-			// Convert input to byte array and hash it
-		    using (var sha = SHA256.Create())
-			    return sha.ComputeHash(Encoding.UTF8.GetBytes(input));
-		}
     }
 }
