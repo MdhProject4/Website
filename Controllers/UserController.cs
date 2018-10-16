@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectFlight.Data;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ProjectFlight.Controllers
 {
@@ -16,8 +20,15 @@ namespace ProjectFlight.Controllers
 
         public IActionResult Register(string username, string password, string email)
         {
+			// Check if any parameter is missing
+			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+				return new JsonResult(new
+				{
+					error = true
+				});
+
 			// User we're adding
-	        var user = new User
+			var user = new User
 	        {
 		        Username  = username,
 		        Password  = HashPassword(password),
@@ -25,37 +36,46 @@ namespace ProjectFlight.Controllers
 		        IsPremium = false
 	        };
 
-			// Temporary variable with number of rows affected
-	        int num;
+			// Temporary variable to check for errors
+	        var error = false;
 
 			// Add user to database
 	        using (var context = new ApplicationDbContext())
-            {
-                context.Users.Add(user);
-                num = context.SaveChanges();
+	        {
+		        if (context.Users.Any(u => u.Username == username))
+			        error = true;
+		        else
+		        {
+			        context.Users.Add(user);
+			        context.SaveChanges();
+		        }
             }
 
 			// Return json result of error
             return new JsonResult(new
             {
-                error = num == 0
+                error
             });
         }
 
-	    public string HashPassword(string password)
+	    private static string HashPassword(string password)
 	    {
-		    // Generate a 128-bit salt
-		    var salt = new byte[128 / 8];
-		    using (var rng = RandomNumberGenerator.Create())
-			    rng.GetBytes(salt);
+			// Create builder for the string
+		    var builder = new StringBuilder();
 
-		    // Derive a 256-bit key
-		    return Convert.ToBase64String(KeyDerivation.Pbkdf2(
-			    password,					// Password
-			    salt,						// Salt
-			    KeyDerivationPrf.HMACSHA1,	// Prf
-			    10000,						// Iteration count
-			    256 / 8));					// Num bytes requested
+			// Loop through byte array and convert to (hex) string
+		    foreach (var b in Hash(password))
+			    builder.Append(b.ToString("x2"));
+
+			// Return built string
+		    return builder.ToString();
+	    }
+
+	    private static IEnumerable<byte> Hash(string input)
+	    {
+			// Convert input to byte array and hash it
+		    using (var sha = SHA256.Create())
+			    return sha.ComputeHash(Encoding.UTF8.GetBytes(input));
 		}
     }
 }
