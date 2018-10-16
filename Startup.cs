@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFlight.Data;
+using System;
+using System.Data.SqlClient;
 
 namespace ProjectFlight
 {
@@ -36,8 +38,15 @@ namespace ProjectFlight
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 			// Check database
-	        /*using (var context = new ApplicationDbContext())
-		        context.Database.EnsureCreated();*/
+	        try
+	        {
+		        using (var context = new ApplicationDbContext())
+			        context.Database.EnsureCreated();
+	        }
+	        catch (SqlException e)
+	        {
+				Console.WriteLine($"SQL Error: {e.Message}");
+	        }
 
 	        if (env.IsDevelopment())
 		        app.UseDeveloperExceptionPage();
