@@ -131,9 +131,9 @@
 
     function register()
     {
-        const username = registerUserName.value
-        const password = registerPassword.value
-        const email = registerMail.value 
+        const username = window.registerUserName.value
+        const password = window.registerPassword.value
+        const email    = window.registerMail.value 
         if (!username) {
             showLoginError("Username needs to be set")
             return
@@ -141,7 +141,17 @@
         if (!password) {
             showLoginError("Password missing")
         }
-        fetch( `/api/Register?username=${username}&password=${password}&email=${email}`)
+		fetch(`/api/register?username=${username}&password=${password}&email=${email}`)
+			.then(response => response.json())
+			.then(json =>
+			{
+				// If error, assume username is taken
+				if (json.error) {
+					showLoginError("Username already taken")
+				} else {
+					showLoginStatus("Account created!")
+				}
+			})
     }
 
     function login()
@@ -169,6 +179,13 @@
 		{
 			window.btnUserError.style.transform = "translate(0, -100%)"
 		}, 3000)
+	}
+
+	// Like showLoginError, but shows as a 'success' message
+	function showLoginStatus(message)
+	{
+		// TODO
+		showLoginError(message)
 	}
 
 	// Hide any dialogs when clicking/dragging the map

@@ -2,6 +2,9 @@
 
 namespace ProjectFlight.Data
 {
+	/// <summary>
+	/// Class representing a user in the database
+	/// </summary>
 	public class User
     {
 		/// <summary>
