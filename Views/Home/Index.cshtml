@@ -19,24 +19,24 @@
 			<table>
 				<tr>
 					<td>Username</td>
-					<td><input type="text"></td>
+					<td><input id="loginUsername" type="text"></td>
 				</tr>
 				<tr>
 					<td>Password</td>
-					<td><input type="password"></td>
+					<td><input id="loginPassword" type="password"></td>
 				</tr>
 			</table>
 			<span class="btnUserOption" onclick="showRegister(true)">No account? Create one!</span>
 			<div class="buttonContainer">
 				<div class="button" onclick="showLogin(false)">Cancel</div>
-				<div class="button" onclick="showLoginError('Login doesn\'t work yet :c')">Login</div>
+				<div class="button" onclick="login()">Login</div>
 			</div>
 		</div>
 		<div id="btnUserRegister">
 			<table>
 				<tr>
 					<td>Username</td>
-					<td><input id="registerUserName" type="text"></td>
+					<td><input id="registerUsername" type="text"></td>
 				</tr>
 				<tr>
 					<td>Password</td>
@@ -130,18 +130,25 @@
     }
 
     function register()
-    {
-        const username = window.registerUserName.value
+	{
+		// Get entered username, password and email
+        const username = window.registerUsername.value
         const password = window.registerPassword.value
-        const email    = window.registerMail.value 
+		const email    = window.registerMail.value
+
+		// Check for require parameters
         if (!username) {
-            showLoginError("Username needs to be set")
+            showLoginError("Username required")
             return
-        }
+		}
+
         if (!password) {
-            showLoginError("Password missing")
-        }
-		fetch(`/api/register?username=${username}&password=${password}&email=${email}`)
+			showLoginError("Password required")
+			return
+		}
+
+		// Try to register
+		fetch(`/user/register?username=${username}&password=${password}&email=${email}`)
 			.then(response => response.json())
 			.then(json =>
 			{
@@ -155,8 +162,33 @@
     }
 
     function login()
-    {
+	{
+		// Get entered username and password
+		const username = window.loginUsername.value
+		const password = window.loginPassword.value
 
+		// Check for required parameters
+		if (!username) {
+			showLoginError("Username required")
+			return
+		}
+
+		if (!password) {
+			showLoginError("Password required")
+			return
+		}
+
+		// Try to login
+		fetch(`/user/login?username=${username}&password=${password}`)
+			.then(response => response.json())
+			.then(json => {
+				// If error, assume username is taken
+				if (json.error) {
+					showLoginError("Incorrect username or password")
+				} else {
+					showLoginStatus("Login successful!")
+				}
+			})
     }
 
 	// Shows the register or login dialog
@@ -169,23 +201,22 @@
 	}
 
 	// Show error to login/register dialog
-	function showLoginError(message)
+	const showLoginError = message => showLoginMessage(message, "#d32f2f")
+
+	// Like showLoginError, but shows as a 'success' message
+	const showLoginStatus = message => showLoginMessage(message, "#2e7d32")
+
+	// Generic function to show login message
+	function showLoginMessage(message, color)
 	{
 		window.btnUserError.textContent = message
 		window.btnUserError.style.transform = "translate(0, 0)"
+		window.btnUserError.style.backgroundColor = color
 
 		// Automatically hide error after 3 seconds
-		setTimeout(() =>
-		{
+		setTimeout(() => {
 			window.btnUserError.style.transform = "translate(0, -100%)"
 		}, 3000)
-	}
-
-	// Like showLoginError, but shows as a 'success' message
-	function showLoginStatus(message)
-	{
-		// TODO
-		showLoginError(message)
 	}
 
 	// Hide any dialogs when clicking/dragging the map
