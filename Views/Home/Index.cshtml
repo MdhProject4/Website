@@ -70,7 +70,8 @@
 					lat: 59.618706,
 					lng: 16.540438
 				},
-				zoom: 8
+				zoom: 8,
+				disableDefaultUI: true
 			})
 
 		getFlights()
@@ -120,7 +121,7 @@
 
 		const style = window.btnUser.style
 
-		style.top    = show ? "50%"   : "52px"
+		style.top    = show ? "50%"   : "0"
 		style.right  = show ? "50%"   : "0"
 		style.width  = show ? "380px" : "40px"
 		style.height = show ? "200px" : "40px"

@@ -32,7 +32,7 @@ body {
 /* Button for opening the login page and the dialog itself*/
 #btnUser {
 	right: 0;
-	top: 52px;
+	top: 0;
 	cursor: auto;
 }
 /* The login part of the dialog */
