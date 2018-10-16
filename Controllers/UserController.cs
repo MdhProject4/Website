@@ -17,10 +17,10 @@ namespace ProjectFlight.Controllers
 			// User we're adding
 	        var user = new User
 	        {
-		        userName  = username,
-		        password  = password,
-		        email     = email,
-		        isPremium = false
+		        Username  = username,
+		        Password  = password,
+		        Email     = email,
+		        IsPremium = false
 	        };
 
 			// Temporary variable with number of rows affected
