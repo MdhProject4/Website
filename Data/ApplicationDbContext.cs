@@ -9,6 +9,8 @@ namespace ProjectFlight.Data
 	{
 		public DbSet<FlightInfo> FlightInfos { get; set; }
 
+        public DbSet<User> User { get; set; }
+
 		public static string ConnectionString { private get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

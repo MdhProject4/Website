@@ -36,8 +36,8 @@ namespace ProjectFlight
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 			// Check database
-	        using (var context = new ApplicationDbContext())
-		        context.Database.EnsureCreated();
+	        /*using (var context = new ApplicationDbContext())
+		        context.Database.EnsureCreated();*/
 
 	        if (env.IsDevelopment())
 		        app.UseDeveloperExceptionPage();
