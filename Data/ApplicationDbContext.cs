@@ -7,12 +7,21 @@ namespace ProjectFlight.Data
 	/// </summary>
 	public class ApplicationDbContext : DbContext
 	{
+		#region Properties
+
+		public static string ConnectionString { private get; set; }
+
+		#endregion
+
+		#region Database tables
+
 		public DbSet<FlightInfo> FlightInfos { get; set; }
 
         public DbSet<User> Users { get; set; }
 
-		public static string ConnectionString { private get; set; }
-        public DbSet<Bookmarks> Bookmarks { get; set; }
+        public DbSet<FlightBookmark> Bookmarks { get; set; }
+
+		#endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
