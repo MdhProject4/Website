@@ -140,20 +140,16 @@ namespace ProjectFlight.Controllers
 
         }
 
-        public IActionResult ShowSavedFlights(string username, string flightname)
+		/// <summary>
+		/// Get saved flight bookmarks for a specific user
+		/// </summary>
+		/// <param name="username">User's username</param>
+		/// <returns>JSON with array of bookmarks</returns>
+		// TODO: We don't want to pass username here, check cookie instead
+		public IActionResult GetSavedFlights(string username)
         {
-            using (var context = new ApplicationDbContext())
-            {
-                var bookmark = context.FlightBookmarks.FirstOrDefault(u => u.Username == username);
-                if (bookmark == default(FlightBookmark))
-                    return GetResult(true);
-                else if (bookmark.Username == username && bookmark.FlightId == flightname)
-                {
-                    return GetResult(false);
-                }
-                else
-                    return GetResult(true);
-            }
+	        using (var context = new ApplicationDbContext())
+		        return new JsonResult(context.FlightBookmarks.Select(b => b.Username == username));
         }
     }
 }
