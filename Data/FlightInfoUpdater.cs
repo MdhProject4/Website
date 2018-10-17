@@ -20,7 +20,7 @@ namespace ProjectFlight.Data
         /// <summary>
         /// Fetch new flight infos from the API
         /// </summary>
-        private FlightInfoResponse[] flightInfoResponses
+        private static IEnumerable<FlightInfoResponse> FlightInfoResponses
         {
             get
             {
@@ -31,14 +31,14 @@ namespace ProjectFlight.Data
                     
                 // Parse the response
                 dynamic json = JsonConvert.DeserializeObject(response);
-                return json.acList.ToObject<FlightInfoResponse[]>();
+                return json.acList.ToObject<IEnumerable<FlightInfoResponse>>();
             }
         }
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="limit">Limit on how many entries to save to the database</param>
+        /// <param name="planeLimit">Limit on how many entries to save to the database</param>
         // TODO: Remove constructor and make it an abstract class
         public FlightInfoUpdater(int planeLimit)
         {
@@ -64,11 +64,14 @@ namespace ProjectFlight.Data
 
         /// <summary>
         /// Removes all current entries and refreshes with new ones
+        /// </summary>
         private void Overwrite()
         {
+			Console.WriteLine("Updating flight info...");
+
             // TODO: Convert the response to FlightInfo
             var infos = new List<FlightInfo>();
-            foreach (var flight in flightInfoResponses)
+            foreach (var flight in FlightInfoResponses)
 		    {
                 // Check if we've added more than our limit
                 if (infos.Count >= limit)
@@ -79,9 +82,11 @@ namespace ProjectFlight.Data
                 infos.Add(info);
 			}
 
-            // Save to database and overwrite current entries
-            WriteChanges(infos, true);
-        }
+			// Save to database and overwrite current entries
+			WriteChanges(infos, true);
+
+	        Console.WriteLine($"Updated {infos.Count} flight infos to the database");
+		}
 
         /// <summary>
         /// Updates the current entries
@@ -89,7 +94,7 @@ namespace ProjectFlight.Data
         private void Refresh()
         {
             // First get the new flight info
-            var newFlights = flightInfoResponses;
+            var newFlights = FlightInfoResponses;
 
             using (var context = new ApplicationDbContext())
             {
@@ -100,6 +105,7 @@ namespace ProjectFlight.Data
                     context.FlightInfos.Remove(context.FlightInfos.FirstOrDefault(f => f.Id == flight.Icao));
 
                     // Add the new one
+					// TODO: We need to check .Tracked here again
                     context.FlightInfos.Add(new FlightInfo(flight));
                 }
 
@@ -119,9 +125,9 @@ namespace ProjectFlight.Data
             {
                 // See if we should empty it first
                 if (emptyTable)
-                    context.Users.RemoveRange(context.Users);
+                    context.FlightInfos.RemoveRange(context.FlightInfos);
 
-                // Add infos from list to dbset
+                // Add infos from list to db set
                 foreach (var info in infos)
                 {
                     // Database type time can't store values higher than 24 hours
