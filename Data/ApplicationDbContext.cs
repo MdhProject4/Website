@@ -12,8 +12,9 @@ namespace ProjectFlight.Data
         public DbSet<User> Users { get; set; }
 
 		public static string ConnectionString { private get; set; }
+        public DbSet<Bookmarks> Bookmarks { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
 			optionsBuilder.UseSqlServer(ConnectionString);

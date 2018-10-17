@@ -90,5 +90,44 @@ namespace ProjectFlight.Controllers
 			// Return json result of error
             return GetResult(error);
         }
+
+        public IActionResult SaveFlight(string username, string flightName)
+        {
+           
+            using (var context = new ApplicationDbContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.Username == username);
+                if (user == default(User))
+                    return GetResult(true);
+                else if (!user.IsPremium)
+                    return GetResult(true);
+                else
+                {
+                    var bookmark = new Bookmarks
+                    {
+                        Username = user.Username,
+                        SavedFlights = flightName,
+                    };
+                    return GetResult(false);
+                }
+            }
+
+        }
+
+        public IActionResult ShowSavedFlights(string username, string flightname)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var bookmark = context.Bookmarks.FirstOrDefault(u => u.Username == username);
+                if (bookmark == default(Bookmarks))
+                    return GetResult(true);
+                else if (bookmark.Username == username && bookmark.SavedFlights == flightname)
+                {
+                    return GetResult(false);
+                }
+                else
+                    return GetResult(true);
+            }
+        }
     }
 }
