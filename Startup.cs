@@ -66,45 +66,10 @@ namespace ProjectFlight
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-			// Refreshes the flight list
-			// TODO: Use the data we have for now
-			/*
-	        Task.Run(() =>
-	        {
-				Console.WriteLine("Updating flight list...");
-
-		        string response;
-		        using (var client = new WebClient())
-			        response = client.DownloadString("https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json");
-
-		        dynamic json = JsonConvert.DeserializeObject(response);
-		        var flights = json.acList.ToObject<FlightInfoResponse[]>();
-
-		        var infos = new List<FlightInfo>();
-		        foreach (var flight in flights)
-		        {
-			        var info = new FlightInfo(flight);
-					infos.Add(info);
-				}
-				
-		        using (var context = new ApplicationDbContext())
-		        {
-			        foreach (var info in infos)
-					{
-						// Database type time can't store values higher than 24 hours
-						if (info.Tracked.TotalHours >= 24)
-							info.Tracked = TimeSpan.Parse("23:59:59.9999999");
-
-						context.FlightInfos.Add(info);
-					}
-
-					context.SaveChanges();
-				}
-
-		        Console.WriteLine($"Saved {infos.Count} flights");
-	        });
-			*/
+	        
+			// Save 300 entries to the database
+			// (School network gets overloaded and crashes if higher)
+			var updater = new FlightInfoUpdater(300);
         }
     }
 }
