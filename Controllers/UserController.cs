@@ -39,6 +39,12 @@ namespace ProjectFlight.Controllers
 
 		#endregion
 
+		/// <summary>
+		/// Tries to login the user with the specified username and password
+		/// </summary>
+		/// <param name="username">User's username</param>
+		/// <param name="password">User's password (not hashed)</param>
+		/// <returns>JSON response with error</returns>
 		public IActionResult Login(string username, string password)
         {
 	        // Check if any parameter is missing
@@ -57,7 +63,14 @@ namespace ProjectFlight.Controllers
 	        return GetResult(!found);
         }
 
-        public IActionResult Register(string username, string password, string email)
+		/// <summary>
+		/// Tries to create an account
+		/// </summary>
+		/// <param name="username">User's requested username</param>
+		/// <param name="password">User's password</param>
+		/// <param name="email">User's optional email</param>
+		/// <returns>JSON response with error</returns>
+		public IActionResult Register(string username, string password, string email)
         {
 			// Check if any parameter is missing
 			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -91,25 +104,38 @@ namespace ProjectFlight.Controllers
             return GetResult(error);
         }
 
-        public IActionResult SaveFlight(string username, string flightName)
+		/// <summary>
+		/// Save a flight bookmark
+		/// </summary>
+		/// <param name="username">Username to save for (will be removed later)</param>
+		/// <param name="flightId">Flight ID to save</param>
+		/// <returns>JSON response with error</returns>
+		// TODO: We don't want to pass username here, check cookie instead
+		public IActionResult SaveFlight(string username, string flightId)
         {
            
             using (var context = new ApplicationDbContext())
             {
+				// Try to get the user associated with the username
                 var user = context.Users.FirstOrDefault(u => u.Username == username);
+
+				// If it wasn't found, return
                 if (user == default(User))
                     return GetResult(true);
-                else if (!user.IsPremium)
-                    return GetResult(true);
-                else
-                {
-                    var bookmark = new FlightBookmark
-                    {
-                        Username = user.Username,
-                        FlightId = flightName,
-                    };
-                    return GetResult(false);
-                }
+
+				// Create the bookmark
+	            var bookmark = new FlightBookmark
+	            {
+		            Username = user.Username,
+		            FlightId = flightId,
+	            };
+
+				// Try to add it to the database
+				context.FlightBookmarks.Add(bookmark);
+	            context.SaveChanges();
+	            
+				// Return error: false
+	            return GetResult(false);
             }
 
         }
@@ -118,7 +144,7 @@ namespace ProjectFlight.Controllers
         {
             using (var context = new ApplicationDbContext())
             {
-                var bookmark = context.Bookmarks.FirstOrDefault(u => u.Username == username);
+                var bookmark = context.FlightBookmarks.FirstOrDefault(u => u.Username == username);
                 if (bookmark == default(FlightBookmark))
                     return GetResult(true);
                 else if (bookmark.Username == username && bookmark.FlightId == flightname)
