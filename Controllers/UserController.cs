@@ -103,10 +103,10 @@ namespace ProjectFlight.Controllers
                     return GetResult(true);
                 else
                 {
-                    var bookmark = new Bookmarks
+                    var bookmark = new FlightBookmark
                     {
                         Username = user.Username,
-                        SavedFlights = flightName,
+                        FlightId = flightName,
                     };
                     return GetResult(false);
                 }
@@ -119,9 +119,9 @@ namespace ProjectFlight.Controllers
             using (var context = new ApplicationDbContext())
             {
                 var bookmark = context.Bookmarks.FirstOrDefault(u => u.Username == username);
-                if (bookmark == default(Bookmarks))
+                if (bookmark == default(FlightBookmark))
                     return GetResult(true);
-                else if (bookmark.Username == username && bookmark.SavedFlights == flightname)
+                else if (bookmark.Username == username && bookmark.FlightId == flightname)
                 {
                     return GetResult(false);
                 }
