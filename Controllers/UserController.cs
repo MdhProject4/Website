@@ -10,12 +10,15 @@ namespace ProjectFlight.Controllers
 	/// <summary>
 	/// Controller to handle user related feature
 	/// </summary>
-	// TODO: Get context instead of creating each time
 	public class UserController : Controller
     {
+	    private readonly ApplicationDbContext dbContext;
+
+	    public UserController(ApplicationDbContext context) => dbContext = context;
+
 		#region Helpers
 
-	    private static JsonResult GetResult(bool error) => new JsonResult(new { error });
+		private static JsonResult GetResult(bool error) => new JsonResult(new { error });
 
 	    private static string HashPassword(string password)
 	    {
@@ -55,9 +58,7 @@ namespace ProjectFlight.Controllers
 	        var hashedPassword = HashPassword(password);
 
 			// See if it's found in the database
-	        bool found;
-	        using (var context = new ApplicationDbContext())
-		        found = context.Users.Any(u => u.Username == username && u.Password == hashedPassword);
+	        var found = dbContext.Users.Any(u => u.Username == username && u.Password == hashedPassword);
 
 			// TODO: For now, return result without saving login in cookie
 	        return GetResult(!found);
@@ -71,40 +72,37 @@ namespace ProjectFlight.Controllers
 		/// <param name="email">User's optional email</param>
 		/// <returns>JSON response with error</returns>
 		public IActionResult Register(string username, string password, string email)
-        {
-			// Check if any parameter is missing
-			if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-				return GetResult(true);
+	    {
+		    // Check if any parameter is missing
+		    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+			    return GetResult(true);
 
-			// User we're adding
-			var user = new User
-	        {
-		        Username  = username,
-		        Password  = HashPassword(password),
-		        Email     = email,
-		        IsPremium = false
-	        };
+		    // User we're adding
+		    var user = new User
+		    {
+			    Username = username,
+			    Password = HashPassword(password),
+			    Email = email,
+			    IsPremium = false
+		    };
 
-			// Temporary variable to check for errors
-	        var error = false;
+		    // Temporary variable to check for errors
+		    var error = false;
 
-			// Add user to database
-	        using (var context = new ApplicationDbContext())
-	        {
-		        if (context.Users.Any(u => u.Username == username))
-			        error = true;
-		        else
-		        {
-			        context.Users.Add(user);
-			        context.SaveChanges();
-		        }
-            }
+		    // Add user to database
+		    if (dbContext.Users.Any(u => u.Username == username))
+			    error = true;
+		    else
+		    {
+			    dbContext.Users.Add(user);
+			    dbContext.SaveChanges();
+		    }
 
-			// Return json result of error
-            return GetResult(error);
-        }
+		    // Return json result of error
+		    return GetResult(error);
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Save a flight bookmark
 		/// </summary>
 		/// <param name="username">Username to save for (will be removed later)</param>
@@ -112,44 +110,36 @@ namespace ProjectFlight.Controllers
 		/// <returns>JSON response with error</returns>
 		// TODO: We don't want to pass username here, check cookie instead
 		public IActionResult SaveFlight(string username, string flightId)
-        {
-           
-            using (var context = new ApplicationDbContext())
-            {
-				// Try to get the user associated with the username
-                var user = context.Users.FirstOrDefault(u => u.Username == username);
+	    {
+		    // Try to get the user associated with the username
+		    var user = dbContext.Users.FirstOrDefault(u => u.Username == username);
 
-				// If it wasn't found, return
-                if (user == default(User))
-                    return GetResult(true);
+		    // If it wasn't found, return
+		    if (user == default(User))
+			    return GetResult(true);
 
-				// Create the bookmark
-	            var bookmark = new FlightBookmark
-	            {
-		            Username = user.Username,
-		            FlightId = flightId,
-	            };
+		    // Create the bookmark
+		    var bookmark = new FlightBookmark
+		    {
+			    Username = user.Username,
+			    FlightId = flightId,
+		    };
 
-				// Try to add it to the database
-				context.FlightBookmarks.Add(bookmark);
-	            context.SaveChanges();
-	            
-				// Return error: false
-	            return GetResult(false);
-            }
+		    // Try to add it to the database
+		    dbContext.FlightBookmarks.Add(bookmark);
+		    dbContext.SaveChanges();
 
-        }
+		    // Return error: false
+		    return GetResult(false);
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Get saved flight bookmarks for a specific user
 		/// </summary>
 		/// <param name="username">User's username</param>
 		/// <returns>JSON with array of bookmarks</returns>
 		// TODO: We don't want to pass username here, check cookie instead
-		public IActionResult GetSavedFlights(string username)
-        {
-	        using (var context = new ApplicationDbContext())
-		        return new JsonResult(context.FlightBookmarks.Select(b => b.Username == username));
-        }
+		public IActionResult GetSavedFlights(string username) => 
+		    new JsonResult(dbContext.FlightBookmarks.Select(b => b.Username == username));
     }
 }
