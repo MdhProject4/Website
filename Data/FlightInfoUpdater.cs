@@ -11,7 +11,7 @@ namespace ProjectFlight.Data
 	/// <summary>
 	/// Updates the flight info database in the background
 	/// </summary>
-	public class FlightInfoUpdater
+	public class FlightInfoUpdater : IDisposable
 	{
 		/// <summary>
 		/// When the initial flight infos gets replaced
@@ -45,6 +45,11 @@ namespace ProjectFlight.Data
 		/// </summary>
 		private readonly TimeSpan delay;
 
+		/// <summary>
+		/// Keep running the refresh loop
+		/// </summary>
+		private bool running;
+
         /// <summary>
         /// Fetch new flight infos from the API
         /// </summary>
@@ -74,8 +79,13 @@ namespace ProjectFlight.Data
 	        delay = refreshDelay;
             Task.Run(() => UpdateFlightInfos());
         }
+		
+		/// <summary>
+		/// Stop the refresh loop
+		/// </summary>
+		public void Dispose() => running = false;
 
-        /// <summary>
+		/// <summary>
 		/// Starts updating flight info on the current thread
 		/// </summary>
 		private void UpdateFlightInfos()
@@ -83,8 +93,9 @@ namespace ProjectFlight.Data
             // First overwrite all current entries
             Overwrite();
 
-            // Then refresh every minute for now
-            while (true)
+            // Start refresh loop
+			running = true;
+            while (running)
             {
                 Refresh();
 				Thread.Sleep(delay);
