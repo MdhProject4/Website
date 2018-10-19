@@ -186,7 +186,13 @@ namespace ProjectFlight.Data
                     if (info.Tracked.TotalHours >= 24)
                         info.Tracked = TimeSpan.Parse("23:59:59.9999999");
 
-                    context.FlightInfos.Add(info);
+					// Make sure it can be added to the database
+	                var errors = info.Validate();
+					// TODO: For now, throw an exception
+	                if (errors.Any())
+		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields");
+
+	                context.FlightInfos.Add(info);
                 }
 
 				context.SaveChanges();
