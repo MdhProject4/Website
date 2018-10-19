@@ -60,7 +60,10 @@ namespace ProjectFlight.Controllers
 			// See if it's found in the database
 	        var found = dbContext.Users.Any(u => u.Username == username && u.Password == hashedPassword);
 
-			// TODO: For now, return result without saving login in cookie
+			// If found, sign in
+			if (found)
+				SessionManager.Add(HttpContext, username);
+
 	        return GetResult(!found);
         }
 
@@ -96,6 +99,7 @@ namespace ProjectFlight.Controllers
 		    {
 			    dbContext.Users.Add(user);
 			    dbContext.SaveChanges();
+				// TODO: Login here as well?
 		    }
 
 		    // Return json result of error
