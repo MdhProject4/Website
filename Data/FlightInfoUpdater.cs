@@ -1,9 +1,10 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace ProjectFlight.Data
 {
@@ -12,10 +13,37 @@ namespace ProjectFlight.Data
 	/// </summary>
 	public class FlightInfoUpdater
 	{
+		/// <summary>
+		/// When the initial flight infos gets replaced
+		/// </summary>
+		/// <param name="amount">Amount of flights that got added</param>
+		public delegate void AddEvent(int amount);
+
+		/// <summary>
+		/// When the flight infos gets updated
+		/// </summary>
+		/// <param name="amount">Amount of flights that got updated</param>
+		public delegate void RefreshEvent(int amount);
+
+		/// <summary>
+		/// When the initial flight infos gets replaced
+		/// </summary>
+		public event AddEvent OnAdd;
+
+		/// <summary>
+		/// When the flight infos gets updated
+		/// </summary>
+		public event RefreshEvent OnRefresh;
+
         /// <summary>
         /// The limit of entries to add to the database
         /// </summary>
         private readonly int limit;
+
+		/// <summary>
+		/// Delay between each refresh
+		/// </summary>
+		private readonly TimeSpan delay;
 
         /// <summary>
         /// Fetch new flight infos from the API
@@ -35,14 +63,15 @@ namespace ProjectFlight.Data
             }
         }
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="planeLimit">Limit on how many entries to save to the database</param>
-        // TODO: Remove constructor and make it an abstract class
-        public FlightInfoUpdater(int planeLimit)
+		/// <summary>
+		/// Default constructor
+		/// </summary>
+		/// <param name="planeLimit">Limit on how many entries to save to the database</param>
+		/// <param name="refreshDelay">The delay between each refresh</param>
+		public FlightInfoUpdater(int planeLimit, TimeSpan refreshDelay)
         {
             limit = planeLimit;
+	        delay = refreshDelay;
             Task.Run(() => UpdateFlightInfos());
         }
 
@@ -58,7 +87,7 @@ namespace ProjectFlight.Data
             while (true)
             {
                 Refresh();
-                Task.Delay(TimeSpan.FromSeconds(60));
+				Thread.Sleep(delay);
             }
 	    }
 
@@ -67,8 +96,6 @@ namespace ProjectFlight.Data
         /// </summary>
         private void Overwrite()
         {
-			Console.WriteLine("Updating flight info...");
-
             // TODO: Convert the response to FlightInfo
             var infos = new List<FlightInfo>();
             foreach (var flight in FlightInfoResponses)
@@ -85,7 +112,8 @@ namespace ProjectFlight.Data
 			// Save to database and overwrite current entries
 			WriteChanges(infos, true);
 
-	        Console.WriteLine($"Updated {infos.Count} flight infos to the database");
+			// Trigger OnAdd event
+			OnAdd?.Invoke(infos.Count);
 		}
 
         /// <summary>
@@ -94,23 +122,36 @@ namespace ProjectFlight.Data
         private void Refresh()
         {
             // First get the new flight info
-            var newFlights = FlightInfoResponses;
+			// We convert it to a dictionary to search in it faster
+            var newFlights = FlightInfoResponses.ToDictionary(f => f.Icao);
+
+			// Changes made to the database
+	        int changes;
 
             using (var context = new ApplicationDbContext())
             {
-                // TODO: Some error checking is probably needed
-                foreach(var flight in newFlights)
-                {
-                    // Find the old result and delete it
-                    context.FlightInfos.Remove(context.FlightInfos.FirstOrDefault(f => f.Id == flight.Icao));
+				// Loop through all existing planes and try to update them
 
-                    // Add the new one
-					// TODO: We need to check .Tracked here again
-                    context.FlightInfos.Add(new FlightInfo(flight));
-                }
+	            foreach (var info in context.FlightInfos)
+	            {
+		            // Try to find it in the list of all flights
+		            if (newFlights.ContainsKey(info.Id))
+		            {
+						// Get the new value
+			            var updated = newFlights[info.Id];
 
-                context.SaveChanges();
+						// For now at least, only update position
+			            info.Latitude  = updated.Lat;
+			            info.Longitude = updated.Long;
+		            }
+	            }
+
+				// Update database
+	            changes = context.SaveChanges();
             }
+
+			// Trigger OnRefresh event
+			OnRefresh?.Invoke(changes);
         }
 
         /// <summary>
@@ -119,7 +160,7 @@ namespace ProjectFlight.Data
         /// <param name="infos">The info to save to the database</param>
         /// <param name="emptyTable">Empty the table before adding values</param>
         // TODO: Remove this?
-        private void WriteChanges(IEnumerable<FlightInfo> infos, bool emptyTable = false)
+        private static void WriteChanges(IEnumerable<FlightInfo> infos, bool emptyTable = false)
         {
             using (var context = new ApplicationDbContext())
             {

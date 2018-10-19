@@ -67,7 +67,12 @@ namespace ProjectFlight
 	        
 			// Save 300 entries to the database
 			// (School network gets overloaded and crashes if higher)
-			var updater = new FlightInfoUpdater(300);
+			// TODO: Instead of logging to console, use proper ASP.NET logger
+			var updater = new FlightInfoUpdater(300, TimeSpan.FromSeconds(10));
+
+			// Subscribe to some testing events
+	        updater.OnAdd     += amount => Console.WriteLine($"Added {amount} flight infos");
+	        updater.OnRefresh += amount => Console.WriteLine($"Refreshed {amount} flight infos");
         }
     }
 }
