@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ProjectFlight.Enums;
 
@@ -244,6 +245,44 @@ namespace ProjectFlight.Data
 			CallSign           = info.Call;
 			HasPicture         = info.HasPic;
 			FlightsCount       = info.FlightsCount;
+		}
+
+		/// <summary>
+		/// Validates the current flight info so it's compatible with the database
+		/// </summary>
+		/// <returns>Fields with too long names</returns>
+		public IEnumerable<string> Validate()
+		{
+			var errors = new List<string>();
+			
+			if (Id.Length > 6)
+				errors.Add("Id");
+
+			if (RegistrationNumber?.Length > 10)
+				errors.Add("RegistrationNumber");
+
+			if (Model?.Length > 4)
+				errors.Add("Model");
+
+			if (ModelDescription?.Length > 64)
+				errors.Add("ModelDescription");
+
+			if (Manufacturer?.Length > 32)
+				errors.Add("Manufacturer");
+
+			if (Operator?.Length > 192)
+				errors.Add("Operator");
+
+			if (Departure?.Length > 96)
+				errors.Add("Departure");
+
+			if (Destination?.Length > 96)
+				errors.Add("Destination");
+
+			if (CallSign?.Length > 8)
+				errors.Add("CallSign");
+
+			return errors;
 		}
 	}
 }
