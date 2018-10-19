@@ -54,6 +54,39 @@
 			</div>
 		</div>
 	</div>
+	<div id="btnFilter" class="control">
+		<div id="btnFilterIcon" onclick="showFilter(true)">
+			<svg viewBox="0 0 24 24">
+				<path fill="#666666" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" />
+			</svg>
+		</div>
+		<div id="filterOptions">
+			<div id="filterOpt">
+				<input id="optDepDest" type="checkbox">
+				<label for="optDepDest">Known departure and destination</label>
+
+				<input id="optRecent" type="checkbox">
+				<label for="optRecent">Updated recently</label>
+
+				<input id="optToday" type="checkbox">
+				<label for="optToday">Added today</label>
+
+				<input id="optInAir" type="checkbox">
+				<label for="optInAir">In the air</label>
+			</div>
+
+			<table id="filterPlaneLimit">
+				<tr>
+					<td id="filterMessage" colspan="2">See you on the other side</td>
+				</tr>
+				<tr>
+					<td> Plane limit </td>
+					<td> <input id="optPlaneLimit" type="number" value="50" min="1" max="1000"> </td>
+				</tr>
+			</table>
+			<div class="button" onclick="showFilter(false)">Save</div>
+		</div>
+	</div>
 	<dív id="map"></dív>
 </div>
 
@@ -127,7 +160,21 @@
 		style.height = show ? "200px" : "40px"
 		style.transform    = show ? "translate(50%, -50%)" : "translate(0, 0)"
 		style.borderRadius = show ? "4px" : "2px"
-    }
+	}
+
+	// Shows or hides the filter options
+	function showFilter(show)
+	{
+		window.btnFilterIcon.style.opacity   = show ? 0 : 1
+		window.filterOptions.style.transform = show ? "scale(1, 1)" : "scale(0, 0)"
+
+		const style = window.btnFilter.style
+
+		style.width  = show ? "256px" : "40px"
+		style.height = show ? "254px" : "40px"
+		style.borderRadius = show ? "4px" : "2px"
+	}
+	showFilter(true)
 
     function register()
 	{
@@ -218,6 +265,9 @@
 			window.btnUserError.style.transform = "translate(0, -100%)"
 		}, 3000)
 	}
+
+	// If we set the plane limit to something over 100, well, good luck
+	window.optPlaneLimit.addEventListener("input", () => window.filterMessage.style.opacity = window.optPlaneLimit.value >= 100 ? 1 : 0)
 
 	// Hide any dialogs when clicking/dragging the map
 	window.map.addEventListener("mousedown", () => {

@@ -29,7 +29,7 @@ body {
 	margin: 11px;
 }
 
-/* Button for opening the login page and the dialog itself*/
+/* Button for opening the login page and the dialog itself */
 #btnUser {
 	right: 0;
 	top: 0;
@@ -59,7 +59,7 @@ body {
 	transition: all 0.5s ease-in-out;
 }
 /* The user icon */
-#btnUserIcon {
+#btnUserIcon, #btnFilterIcon {
 	width: 40px;
 	height: 40px;
 	cursor: pointer;
@@ -69,7 +69,7 @@ body {
 	padding: 4px;
 }
 /* Custom Google inspired input styles */
-#btnUser input[type="text"], #btnUser input[type="password"], #btnUser input[type="email"] {
+#btnUser input[type="text"], #btnUser input[type="password"], #btnUser input[type="email"], #filterPlaneLimit input[type="number"] {
 	background-color: rgba(0, 0, 0, 0);
 	color: black;
 	border: 0;
@@ -81,6 +81,46 @@ body {
 	/* Dialogs usually have the buttons on the right */
 	margin: 8px 8px 0 0;
 	align-self: flex-end;
+}
+
+/* Button for opening the filter options */
+#btnFilter {
+	right: 0;
+	top: 52px;
+	font-family: "Roboto Light", sans-serif;
+	font-size: 0.8em;
+	box-sizing: border-box;
+	cursor: auto;
+	transition: all 0.6s ease-in-out;
+}
+#filterOptions {
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transform: scale(0, 0);
+	transition: all 0.6s ease-in-out;
+}
+#filterOpt {
+	display: flex;
+	flex-direction: column;
+}
+#filterOpt label {
+	margin-top: 4px;
+}
+#filterOptions .button {
+	margin-top: 16px;
+}
+#filterPlaneLimit {
+	margin-top: 4px;
+}
+#filterPlaneLimit input {
+	width: 64px;
+}
+#filterPlaneLimit #filterMessage {
+	color: #d32f2f;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out;
 }
 
 /* Text/button to switch from login to register */
@@ -146,4 +186,50 @@ body {
 }
 .button:hover {
 	background-color: rgba(207, 216, 220, 0.25);
+}
+
+/* Custom checkboxes */
+
+/* Hide default checkbox */
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+	position: absolute;
+	left: -9999px;
+}
+/* Position the checkbox correctly */
+[type="checkbox"]:not(:checked) + label, [type="checkbox"]:checked + label {
+	position: relative;
+	padding-left: 1.95em;
+	cursor: pointer;
+}
+/* Main checkbox frame */
+[type="checkbox"]:not(:checked) + label:before, [type="checkbox"]:checked + label:before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 18px;
+	height: 18px;
+	background: #eceff1;
+	border-radius: 4px;
+}
+/* Checkbox icon */
+[type="checkbox"]:not(:checked) + label:after, [type="checkbox"]:checked + label:after {
+	content: '\2713\0020';
+	position: absolute;
+	top: 9px;
+	left: 2px;
+	font-size: 18px;
+	line-height: 0;
+	color: #4caf50;
+	transition: all .2s;
+}
+/* Hide icon when unchecked */
+[type="checkbox"]:not(:checked) + label:after {
+	opacity: 0;
+	transform: scale(0);
+}
+/* Show icon when checked */
+[type="checkbox"]:checked + label:after {
+	opacity: 1;
+	transform: scale(1);
 }
