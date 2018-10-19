@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectFlight.Data;
 using System;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ProjectFlight
 {
@@ -32,7 +33,10 @@ namespace ProjectFlight
 	        services.AddDbContext<ApplicationDbContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-		}
+
+			// Add session/cookies
+	        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -59,6 +63,8 @@ namespace ProjectFlight
 			//app.UseHttpsRedirection();
 	        app.UseStaticFiles();
 	        app.UseCookiePolicy();
+
+	        app.UseAuthentication();
 
 			app.UseMvc(routes =>
             {
