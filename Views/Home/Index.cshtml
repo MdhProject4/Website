@@ -62,16 +62,16 @@
 		</div>
 		<div id="filterOptions">
 			<div id="filterOpt">
-				<input id="optDepDest" type="checkbox">
+				<input id="optDepDest" type="checkbox" checked>
 				<label for="optDepDest">Known departure and destination</label>
 
-				<input id="optRecent" type="checkbox">
+				<input id="optRecent" type="checkbox" checked>
 				<label for="optRecent">Updated recently</label>
 
-				<input id="optToday" type="checkbox">
+				<input id="optToday" type="checkbox" checked>
 				<label for="optToday">Added today</label>
 
-				<input id="optInAir" type="checkbox">
+				<input id="optInAir" type="checkbox" checked>
 				<label for="optInAir">In the air</label>
 			</div>
 
@@ -225,6 +225,11 @@
 		style.width  = show ? "256px" : "40px"
 		style.height = show ? "254px" : "40px"
 		style.borderRadius = show ? "4px" : "2px"
+
+		// If we're closing filter options, apply changes
+		if (!show) {
+			overwriteFlights()
+		}
 	}
 
     function register()
@@ -355,13 +360,74 @@
 </script>
 
 <script>
-	// When loading the map, fetch all current flights
+	// Gets all flights and keeps them updated
 	function getFlights()
 	{
-		// TODO: For now, default to displaying 50 flights
-		fetch("/api/getFlights?limit=50&depDest=true")
+		// First, fill the map with initial planes
+		overwriteFlights()
+
+		// Every 5 seconds, update them
+		setInterval(() =>
+		{
+			// Fetch new planes
+			fetch(getFlightUrl())
+				.then(response => response.json())
+				.then(json =>
+				{
+					// Loop through all the new planes
+					json.forEach(item =>
+					{
+						// Loop through all known planes to try and find a match to update
+						planes.some(plane =>
+						{
+							if (plane.id === item.id) {
+								// If it was found, update and return
+								plane.setPosition({
+									lat: item.latitude,
+									lng: item.longitude
+								})
+								return true
+							}
+							// If not, continue searching
+							return false
+						})
+					})
+				})
+		}, 5000)
+	}
+
+	// Overwrite all current planes, used during fist visit and when changing filters
+	function overwriteFlights()
+	{
+		// Remove all existing planes
+		removePlanes()
+
+		// Fetch new flights and fill the map
+		fetch(getFlightUrl())
 			.then(response => response.json())
 			.then(json => json.forEach(item => addPlane(item)))
+	}
+
+	// Gets all filter options, the url and stuffs
+	function getFlightUrl()
+	{
+		// Get filter options
+		const opt = getFilterOptions()
+
+		// Return parsed url
+		return `/api/getFlights?limit=${opt.limit}&depDest=${opt.depDest}&recent=${opt.recent}&today=${opt.today}&inAir=${opt.inAir}`
+	}
+
+	// Get filter options
+	function getFilterOptions()
+	{
+		return {
+			depDest: window.optDepDest.checked,
+			recent:  window.optRecent.checked,
+			today:   window.optToday.checked,
+			inAir:   window.optInAir.checked,
+			limit:   window.optPlaneLimit.value
+		}
 	}
 </script>
 
