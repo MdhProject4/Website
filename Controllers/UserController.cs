@@ -144,6 +144,6 @@ namespace ProjectFlight.Controllers
 		/// <returns>JSON with array of bookmarks</returns>
 		// TODO: We don't want to pass username here, check cookie instead
 		public IActionResult GetSavedFlights(string username) => 
-		    new JsonResult(dbContext.FlightBookmarks.Select(b => b.Username == username));
+		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == username));
     }
 }
