@@ -20,7 +20,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Aircraft registration number
 		/// </summary>
-		[MaxLength(10)]
+		[MaxLength(24)]
 		public string RegistrationNumber { get; set; }
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Aircraft's model
 		/// </summary>
-		[MaxLength(4)]
+		[MaxLength(16)]
 		public string Model { get; set; }
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Call sign of the aircraft
 		/// </summary>
-		[MaxLength(8)]
+		[MaxLength(128)]
 		public string CallSign { get; set; }
 
 		/// <summary>
@@ -258,10 +258,10 @@ namespace ProjectFlight.Data
 			if (Id.Length > 6)
 				errors.Add("Id");
 
-			if (RegistrationNumber?.Length > 10)
+			if (RegistrationNumber?.Length > 24)
 				errors.Add("RegistrationNumber");
 
-			if (Model?.Length > 4)
+			if (Model?.Length > 16)
 				errors.Add("Model");
 
 			if (ModelDescription?.Length > 64)
@@ -279,7 +279,7 @@ namespace ProjectFlight.Data
 			if (Destination?.Length > 96)
 				errors.Add("Destination");
 
-			if (CallSign?.Length > 8)
+			if (CallSign?.Length > 128)
 				errors.Add("CallSign");
 
 			return errors;
