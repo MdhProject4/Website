@@ -14,10 +14,11 @@ namespace ProjectFlight.Controllers
 	    /// <param name="depDest">Only show flights who have a known departure and destination</param>
 	    /// <param name="inAir">Only show flights who are currently in the air</param>
 	    /// <param name="today">Only show flights that was added in the last 24 hours</param>
+	    /// <param name="recent">If the flight has been updated in the past hour</param>
 	    /// <param name="limit">Maximum number of results returned</param>
 	    /// <param name="query">Only show flights matching the query for departure or destination location</param>
 	    /// <returns><see cref="JsonResult"/> of all results</returns>
-	    public IActionResult GetFlights(bool depDest = false, bool inAir = false, bool today = false, int limit = 1000, string query = null)
+	    public IActionResult GetFlights(bool depDest = false, bool inAir = false, bool today = false, bool recent = false, int limit = 1000, string query = null)
         {
 			// First get all values
 	        IEnumerable<FlightInfo> flights;
@@ -32,6 +33,8 @@ namespace ProjectFlight.Controllers
 		        flights = flights.Where(f => f.Grounded == false);
 	        if (today)
 		        flights = flights.Where(f => f.Tracked != TimeSpan.Parse("23:59:59.9999999"));
+	        if (recent)
+		        flights = flights.Where(f => f.LastUpdate < DateTime.UtcNow + TimeSpan.FromHours(1));
 
 	        if (query != null)
 	        {
