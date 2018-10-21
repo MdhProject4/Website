@@ -197,40 +197,12 @@
 		searchPlace(departure)
 			.then(response =>
 			{
-				from = new google.maps.Marker({
-					position: {
-						lat: response.lat,
-						lng: response.lng
-					},
-					map: map,
-					icon: {
-						path: getSvgPath("arrow-up"),
-						scale: 1.4,
-						fillColor: "#ffffff",
-						fillOpacity: 0.9,
-						strokeColor: "#000000",
-						strokeWeight: 0.9,
-					}
-				})
+				from = addAirport(getSvgPath("airplane-takeoff"), response)
 			})
 		searchPlace(destination)
 			.then(response =>
 			{
-				to = new google.maps.Marker({
-					position: {
-						lat: response.lat,
-						lng: response.lng
-					},
-					map: map,
-					icon: {
-						path: getSvgPath("arrow-down"),
-						scale: 1.4,
-						fillColor: "#ffffff",
-						fillOpacity: 0.9,
-						strokeColor: "#000000",
-						strokeWeight: 0.9,
-					}
-				})
+				to = addAirport(getSvgPath("airplane-landing"), response)
 			})
 
 		// When the info window is closed, remove the icons
@@ -244,6 +216,43 @@
 				to.setMap(null)
 			}
 		})
+	}
+
+	function addAirport(path, info)
+	{
+		const infoWindow = new google.maps.InfoWindow({
+			content:
+				`
+					<div class="flightInfoWindow">
+						<span> ${info.name} </span>
+						<div title="Toggle bookmark" class="infoOptSave">
+							<svg viewBox="0 0 24 24">
+								<path fill="#666666" d="${getSvgPath("bookmark-outline")}">
+							</svg>
+						</div>
+					</div>
+				`
+		})
+
+		const marker = new google.maps.Marker({
+			position: {
+				lat: info.lat,
+				lng: info.lng
+			},
+			map: map,
+			icon: {
+				path: path,
+				scale: 1.4,
+				fillColor: "#ffffff",
+				fillOpacity: 0.9,
+				strokeColor: "#000000",
+				strokeWeight: 0.9,
+			}
+		})
+
+		marker.addListener("click", () => infoWindow.open(map, marker))
+
+		return marker
 	}
 
 	// Removes all planes known
