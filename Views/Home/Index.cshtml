@@ -175,17 +175,20 @@
 				rotation: plane.angle
 			},
 			// ID of the plane used to update it later
-			id: plane.id
+			id: plane.id,
+			// Departure and destination ID
+			depId:  plane.departureId,
+			destId: plane.destinationId
 		})
 
 		// Attach info window to marker
-		marker.addListener("click", () => openInfoWindow(infoWindow, marker, plane.departure, plane.destination))
+		marker.addListener("click", () => openInfoWindow(infoWindow, marker, plane))
 
 		// Add marker to planes array
 		planes.push(marker)
 	}
 
-	function openInfoWindow(infoWindow, marker, departure, destination)
+	function openInfoWindow(infoWindow, marker, info)
 	{
 		// Open the info window itself
 		infoWindow.open(map, marker)
@@ -194,14 +197,16 @@
 		let from, to
 
 		// Try to find airport locations
-		searchPlace(departure)
+		searchPlace(info.departure)
 			.then(response =>
 			{
+				response.id = info.departureId
 				from = addAirport(getSvgPath("airplane-takeoff"), response)
 			})
-		searchPlace(destination)
+		searchPlace(info.destination)
 			.then(response =>
 			{
+				response.id = info.destinationId
 				to = addAirport(getSvgPath("airplane-landing"), response)
 			})
 
@@ -224,10 +229,10 @@
 			content:
 				`
 					<div class="flightInfoWindow">
-						<span> ${info.name} </span>
-						<div title="Toggle bookmark" class="infoOptSave">
+						<span> ${info.id}: ${info.name} </span>
+						<div title="Toggle bookmark" class="infoOptSave" onclick="saveAirport('${info.id}')">
 							<svg viewBox="0 0 24 24">
-								<path fill="#666666" d="${getSvgPath("bookmark-outline")}">
+								<path id="infoOptAirport_${info.id}" fill="#666666" d="${getSvgPath("bookmark-outline")}">
 							</svg>
 						</div>
 					</div>
@@ -406,6 +411,13 @@
 	{
 		// For now, just change the icon
 		document.getElementById(`infoOptSave_${id}`).setAttribute("d", getSvgPath("bookmark"))
+	}
+
+	// Toggle airport bookmark
+	function saveAirport(id)
+	{
+		// For now, just change the icon
+		document.getElementById(`infoOptAirport_${id}`).setAttribute("d", getSvgPath("bookmark"))
 	}
 
 	// Neater way get svg paths

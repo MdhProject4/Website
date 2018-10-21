@@ -48,7 +48,7 @@ body {
 	flex-direction: row;
 	justify-content: center;
 }
-.flightInfoWindow .infoOptions svg {
+.flightInfoWindow svg {
 	max-height: 24px;
 	cursor: pointer;
 }
