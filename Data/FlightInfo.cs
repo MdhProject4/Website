@@ -163,7 +163,7 @@ namespace ProjectFlight.Data
 		public string DepartureCity => GetInfoFromLocation(Departure, LocationInfo.City);
 
 		/// <summary>
-		/// Departure city. Null if <see cref="Departure"/> is null
+		/// Departure country. Null if <see cref="Departure"/> is null
 		/// </summary>
 		public string DepartureCountry => GetInfoFromLocation(Departure, LocationInfo.Country);
 
@@ -179,17 +179,17 @@ namespace ProjectFlight.Data
 		public string Destination { get; set; }
 
 		/// <summary>
-		/// Departure city. Null if <see cref="Destination"/> is null
+		/// Destination city. Null if <see cref="Destination"/> is null
 		/// </summary>
 		public string DestinationCity => GetInfoFromLocation(Destination, LocationInfo.City);
 
 		/// <summary>
-		/// Departure city. Null if <see cref="Destination"/> is null
+		/// Destination country. Null if <see cref="Destination"/> is null
 		/// </summary>
 		public string DestinationCountry => GetInfoFromLocation(Destination, LocationInfo.Country);
 
 		/// <summary>
-		/// Departure ID. Null if <see cref="Departure"/> is null
+		/// Destination ID. Null if <see cref="Departure"/> is null
 		/// </summary>
 		public string DestinationId => Destination.Split(' ')[0];
 
