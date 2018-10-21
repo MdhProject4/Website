@@ -168,6 +168,11 @@ namespace ProjectFlight.Data
 		public string DepartureCountry => GetInfoFromLocation(Departure, LocationInfo.Country);
 
 		/// <summary>
+		/// Departure ID. Null if <see cref="Departure"/> is null
+		/// </summary>
+		public string DepartureId => Departure.Split(' ')[0];
+
+		/// <summary>
 		/// Code and name of destination airport
 		/// </summary>
 		[MaxLength(96)]
@@ -182,6 +187,11 @@ namespace ProjectFlight.Data
 		/// Departure city. Null if <see cref="Destination"/> is null
 		/// </summary>
 		public string DestinationCountry => GetInfoFromLocation(Destination, LocationInfo.Country);
+
+		/// <summary>
+		/// Departure ID. Null if <see cref="Departure"/> is null
+		/// </summary>
+		public string DestinationId => Destination.Split(' ')[0];
 
 		/// <summary>
 		/// If the aircraft is grounded
