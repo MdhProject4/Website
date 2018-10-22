@@ -4,8 +4,33 @@
 
 <div id="mapContainer">
 	<!-- Search box -->
+	<input id="searchInput" placeholder="Enter Your FlightID" type="text">
 	<div id="search">
-		<input id="searchInput" type="text"/>
+		<!-- TEST  -->
+		<div id="searchKlick">
+			<span style="font-size:30px;cursor:pointer; color:black" onclick="openNavmenu()">&#9776;Search</span>
+		</div>
+		<div class="sidenavmenu" id="mySidenavmenu">
+			<a href="#" onclick="closeNav()" style="position:relative; top:-57px; right:-300px;">X</a>
+			<br>
+			<input id="searchInput2" placeholder="Search..." type="text">
+			<div id="infoBorder">
+				<table class="table table-bordered">
+					<thead>
+					<tr>
+						<th>ID</th>
+						<th>RegName</th>			@*vart det ska och vart den kommer ifrån??*@
+						<th>Departure</th>
+						<th>Destination</th>
+						<th>Status </th>
+					</tr>
+					</thead>
+					<tbody id="DataSearching">
+					@*hämtar värden från databas*@
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 	<!-- User button -->
 	<div id="btnUser" class="control">
@@ -309,20 +334,20 @@
 		}
 	}
 
-    function register()
+	function register()
 	{
 		// Get entered username, password and email
-        const username = window.registerUsername.value
-        const password = window.registerPassword.value
+		const username = window.registerUsername.value
+		const password = window.registerPassword.value
 		const email    = window.registerMail.value
 
 		// Check for require parameters
-        if (!username) {
-            showLoginError("Username required")
-            return
+		if (!username) {
+			showLoginError("Username required")
+			return
 		}
 
-        if (!password) {
+		if (!password) {
 			showLoginError("Password required")
 			return
 		}
@@ -339,9 +364,9 @@
 					showLoginStatus("Account created!")
 				}
 			})
-    }
+	}
 
-    function login()
+	function login()
 	{
 		// Get entered username and password
 		const username = window.loginUsername.value
@@ -369,7 +394,7 @@
 					showLoginStatus("Login successful!")
 				}
 			})
-    }
+	}
 
 	// Shows the register or login dialog
 	function showRegister(show)
@@ -425,15 +450,15 @@
 	{
 		switch (icon)
 		{
-			case "bell-outline":     return "M16,17H7V10.5C7,8 9,6 11.5,6C14,6 16,8 16,10.5M18,16V10.5C18,7.43 15.86,4.86 13,4.18V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V4.18C7.13,4.86 5,7.43 5,10.5V16L3,18V19H20V18M11.5,22A2,2 0 0,0 13.5,20H9.5A2,2 0 0,0 11.5,22Z"
-			case "bell":             return "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"
-			case "bookmark-outline": return "M17,18L12,15.82L7,18V5H17M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z"
-			case "bookmark":         return "M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z"
-			case "airplane-takeoff": return "M2.5,19H21.5V21H2.5V19M22.07,9.64C21.86,8.84 21.03,8.36 20.23,8.58L14.92,10L8,3.57L6.09,4.08L10.23,11.25L5.26,12.58L3.29,11.04L1.84,11.43L3.66,14.59L4.43,15.92L6.03,15.5L11.34,14.07L15.69,12.91L21,11.5C21.81,11.26 22.28,10.44 22.07,9.64Z"
-			case "airplane-landing": return "M2.5,19H21.5V21H2.5V19M9.68,13.27L14.03,14.43L19.34,15.85C20.14,16.06 20.96,15.59 21.18,14.79C21.39,14 20.92,13.17 20.12,12.95L14.81,11.53L12.05,2.5L10.12,2V10.28L5.15,8.95L4.22,6.63L2.77,6.24V11.41L4.37,11.84L9.68,13.27Z"
-			case "arrow-up":         return "M2,20V22H22V20H13V5.83L18.5,11.33L19.92,9.92L12,2L4.08,9.92L5.5,11.33L11,5.83V20H2Z"
-			case "arrow-down":       return "M19.92,12.08L12,20L4.08,12.08L5.5,10.67L11,16.17V2H13V16.17L18.5,10.66L19.92,12.08M12,20H2V22H22V20H12Z"
-			default: return null
+		case "bell-outline":     return "M16,17H7V10.5C7,8 9,6 11.5,6C14,6 16,8 16,10.5M18,16V10.5C18,7.43 15.86,4.86 13,4.18V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V4.18C7.13,4.86 5,7.43 5,10.5V16L3,18V19H20V18M11.5,22A2,2 0 0,0 13.5,20H9.5A2,2 0 0,0 11.5,22Z"
+		case "bell":             return "M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"
+		case "bookmark-outline": return "M17,18L12,15.82L7,18V5H17M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z"
+		case "bookmark":         return "M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z"
+		case "airplane-takeoff": return "M2.5,19H21.5V21H2.5V19M22.07,9.64C21.86,8.84 21.03,8.36 20.23,8.58L14.92,10L8,3.57L6.09,4.08L10.23,11.25L5.26,12.58L3.29,11.04L1.84,11.43L3.66,14.59L4.43,15.92L6.03,15.5L11.34,14.07L15.69,12.91L21,11.5C21.81,11.26 22.28,10.44 22.07,9.64Z"
+		case "airplane-landing": return "M2.5,19H21.5V21H2.5V19M9.68,13.27L14.03,14.43L19.34,15.85C20.14,16.06 20.96,15.59 21.18,14.79C21.39,14 20.92,13.17 20.12,12.95L14.81,11.53L12.05,2.5L10.12,2V10.28L5.15,8.95L4.22,6.63L2.77,6.24V11.41L4.37,11.84L9.68,13.27Z"
+		case "arrow-up":         return "M2,20V22H22V20H13V5.83L18.5,11.33L19.92,9.92L12,2L4.08,9.92L5.5,11.33L11,5.83V20H2Z"
+		case "arrow-down":       return "M19.92,12.08L12,20L4.08,12.08L5.5,10.67L11,16.17V2H13V16.17L18.5,10.66L19.92,12.08M12,20H2V22H22V20H12Z"
+		default: return null
 		}
 	}
 
@@ -464,7 +489,7 @@
 	function searchPlaceDebug(query)
 	{
 		searchPlace(query)
-		.then(result => console.log(result))
+			.then(result => console.log(result))
 	}
 
 	// If we set the plane limit to something over 100, well, good luck
@@ -545,6 +570,25 @@
 			today:   window.optToday.checked,
 			inAir:   window.optInAir.checked,
 			limit:   window.optPlaneLimit.value
+		}
+	}
+</script>
+
+<script>
+	function openNavmenu() {
+		document.getElementById("mySidenavmenu").style.width = "370px";
+		document.getElementById("searchKlick").style.visibility = "hidden";
+	}
+	function closeNav() {
+		document.getElementById("mySidenavmenu").style.width = "0";
+		document.getElementById("searchKlick").style.visibility = "visible";
+	}
+	function speedStatus() {
+		if (Grounded == true) {
+			document.getElementById("statusLabel ").text = "On Ground";
+		}
+		else {
+			document.getElementById("statusLabel").text = "In Air";
 		}
 	}
 </script>
