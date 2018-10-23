@@ -180,5 +180,13 @@ namespace ProjectFlight.Controllers
 			// Return if it was successful
 		    return GetResult(error);
 	    }
+
+		/// <summary>
+		/// Get saved notifications for the current user
+		/// </summary>
+		/// <returns>JSON array of notifications</returns>
+		[Authorize]
+	    public IActionResult GetNotifications() => 
+			new JsonResult(dbContext.FlightNotifications.Where(b => b.Username  == SessionManager.Get(HttpContext)));
     }
 }
