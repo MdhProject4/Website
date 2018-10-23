@@ -61,7 +61,7 @@ namespace ProjectFlight.Controllers
 
 			// Try to find flight
 			using (var context = new ApplicationDbContext())
-				info = context.FlightInfos.FirstOrDefault(f => f.Id == id);
+				info = context.FlightInfos.FirstOrDefault(f => f.Id == id || f.RegistrationNumber == id);
 
 			// Check if it was found (not null)
 			return new JsonResult(new
