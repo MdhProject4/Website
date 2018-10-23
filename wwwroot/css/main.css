@@ -301,6 +301,10 @@ body {
 	text-decoration: underline;
 }
 
+#DataSearching td {
+	padding-bottom: 40px;
+}
+
 /* Custom checkboxes */
 
 /* Hide default checkbox */
