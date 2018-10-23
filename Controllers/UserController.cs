@@ -109,16 +109,15 @@ namespace ProjectFlight.Controllers
 	    }
 
 	    /// <summary>
-		/// Save a flight bookmark
+		/// Save a flight bookmark to the current user
 		/// </summary>
-		/// <param name="username">Username to save for (will be removed later)</param>
 		/// <param name="flightId">Flight ID to save</param>
 		/// <returns>JSON response with error</returns>
-		// TODO: We don't want to pass username here, check cookie instead
-		public IActionResult SaveFlight(string username, string flightId)
+		[Authorize]
+		public IActionResult SaveFlight(string flightId)
 	    {
 		    // Try to get the user associated with the username
-		    var user = dbContext.Users.FirstOrDefault(u => u.Username == username);
+		    var user = dbContext.Users.FirstOrDefault(u => u.Username == SessionManager.Get(HttpContext));
 
 		    // If it wasn't found, return
 		    if (user == default(User))
@@ -140,13 +139,12 @@ namespace ProjectFlight.Controllers
 	    }
 
 	    /// <summary>
-		/// Get saved flight bookmarks for a specific user
+		/// Get saved flight bookmarks for the current user
 		/// </summary>
-		/// <param name="username">User's username</param>
 		/// <returns>JSON with array of bookmarks</returns>
-		// TODO: We don't want to pass username here, check cookie instead
-		public IActionResult GetSavedFlights(string username) => 
-		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == username));
+		[Authorize]
+		public IActionResult GetSavedFlights() => 
+		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == SessionManager.Get(HttpContext)));
 
 		/// <summary>
 		/// Adds a notification about a flight to a user
