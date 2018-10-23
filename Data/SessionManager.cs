@@ -48,11 +48,34 @@ namespace ProjectFlight.Data
 		public static async void Remove(HttpContext context) => await context.SignOutAsync();
 
 		/// <summary>
-		/// Get the current user
+		/// Get the current user's username
 		/// </summary>
 		/// <param name="context">Current HTTP context</param>
 		/// <returns>The username of the current user</returns>
 		public static string Get(HttpContext context) =>
 			context.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+
+		/// <summary>
+		/// Get the current user
+		/// </summary>
+		/// <param name="context">Current HTTP context</param>
+		/// <returns>The current user</returns>
+		public static User GetUser(HttpContext context)
+		{
+			// Get the username of the signed in user
+			var username = Get(context);
+
+			// See if we're actually signed in
+			if (username == null)
+				return null;
+
+			User user;
+
+			// Try to find the user in the database
+			using (var db = new ApplicationDbContext())
+				user = db.Users.FirstOrDefault(u => u.Username == username);
+
+			return user;
+		}
 	}
 }
