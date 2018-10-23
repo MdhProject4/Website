@@ -21,6 +21,8 @@ namespace ProjectFlight.Data
 
         public DbSet<FlightBookmark> FlightBookmarks { get; set; }
 
+		public DbSet<FlightNotification> FlightNotifications { get; set; }
+
 		#endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
