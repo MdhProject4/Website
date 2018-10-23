@@ -11,6 +11,6 @@ namespace ProjectFlight.Controllers
 		    this.context = context;
 
 		public IActionResult Index() => 
-			View();
+			View(HttpContext);
 	}
 }
