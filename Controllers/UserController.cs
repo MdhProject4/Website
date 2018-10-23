@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectFlight.Data;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectFlight.Controllers
 {
@@ -145,5 +147,38 @@ namespace ProjectFlight.Controllers
 		// TODO: We don't want to pass username here, check cookie instead
 		public IActionResult GetSavedFlights(string username) => 
 		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == username));
+
+		/// <summary>
+		/// Adds a notification about a flight to a user
+		/// </summary>
+		/// <param name="id">ID of the flight</param>
+		/// <returns>JSON response with error</returns>
+		[Authorize]
+	    public IActionResult AddNotification(string id)
+	    {
+			// TODO: Check so flightID exists
+
+			// Add it to the database
+		    dbContext.FlightNotifications.Add(new FlightNotification
+		    {
+			    FlightId = id,
+			    Username = SessionManager.Get(HttpContext),
+			    Notified = false
+		    });
+
+			// Try to save
+		    var error = false;
+		    try
+		    {
+			    dbContext.SaveChanges();
+		    }
+		    catch (SqlException)
+		    {
+			    error = true;
+		    }
+
+			// Return if it was successful
+		    return GetResult(error);
+	    }
     }
 }
