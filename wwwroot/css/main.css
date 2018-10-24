@@ -49,7 +49,8 @@ body {
 	justify-content: center;
 }
 .flightInfoWindow svg {
-	max-height: 24px;
+	height: 24px;
+	width: 24px;
 	cursor: pointer;
 }
 .flightInfoWindow .infoOptNotif {
