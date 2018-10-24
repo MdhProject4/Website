@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectFlight.Controllers
 {
@@ -132,7 +131,7 @@ namespace ProjectFlight.Controllers
 		    var bookmark = new FlightBookmark
 		    {
 			    Username = user.Username,
-			    SavedId = flightId,
+			    SavedId = flightId
 		    };
 
 		    // Try to add it to the database
@@ -150,11 +149,11 @@ namespace ProjectFlight.Controllers
 		public IActionResult GetSavedFlights() => 
 		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == SessionManager.Get(HttpContext)));
 
-		/// <summary>
-		/// Adds a notification about a flight to a user
-		/// </summary>
-		/// <param name="id">ID of the flight</param>
-		/// <returns>JSON response with error</returns>
+	    /// <summary>
+	    /// Adds a notification about a flight to a user
+	    /// </summary>
+	    /// <param name="id">ID of the flight</param>
+	    /// <returns>JSON response with error</returns>
 	    public IActionResult AddNotification(string id)
 	    {
 			// TODO: Check so flightID exists
