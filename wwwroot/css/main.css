@@ -344,29 +344,36 @@ body {
 	width: 166px;
 	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 }
-#infoBorder {
-	background-color: white;
-	height: auto;
-	width: 97%;
-	right: -5px;
-	position: relative;
-	border-radius: 2px;
-	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
-}
 #searchKlick {
 	height: 40px;
 	width: 127px;
 	border-radius: 2px;
 	opacity: 1;
 	background-color: #f3f3f3;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 }
-.table table-bordered {
-	margin-left: 20px;
-	text-decoration: underline;
+.table.table-bordered {
+	margin-left: 5px;
+	top:21px;
+	width: 360px;
+	border-spacing: 3px;
+	position: relative;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 }
-
-#DataSearching td {
+#DataSearching tr {
 	padding-bottom: 40px;
+	background-color: white;
+	width: 50%;
+	height: 41px;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
+}
+#DataSearching td {
+	border-radius: 4px;
+	width: 50%;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
+}
+.Bold {
+	font-weight: bold;
 }
 
 /* Custom checkboxes */

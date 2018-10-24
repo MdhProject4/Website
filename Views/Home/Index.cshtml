@@ -28,45 +28,47 @@
 			<form action="#" onsubmit="getFlight(); return false;">
 				<input id="searchInput2" placeholder="Enter FlightID or Registration Number..." type="text">
 			</form>
-			<div id="infoBorder">
-				<table class="table table-bordered">
-					<tbody id="DataSearching">
-					<tr>
-						<td>ID:</td>
-						<td id="tableId"></td>
-					</tr>
-					<tr>
-						<td>Registration Number:</td>
-						<td id="tableRegNum"></td>
-					</tr>
-					<tr>
-						<td>Flight Model:</td>
-						<td id="tableFlightModel"></td>
-					</tr>
-					<tr>
-						<td>Manufacturer:</td>
-						<td id="tableManufacture"></td>
-					</tr>
-					<tr>
-						<td>Year:</td>
-						<td id="tableYear"></td>
-					</tr>
-					<tr>
-						<td>Operator:</td>
-						<td id="tableOperator"></td>
-					</tr>
-					<tr>
-						<td>In Air:</td>
-						<td id="tableInAir"></td>
-					</tr>
-					<tr>
-						<td>Flightcount:</td>
-						<td id="tableFlightcount"></td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
+			<table class="table table-bordered">
+				<tbody id="DataSearching">
+				<tr>
+					<td class="Bold">ID:</td>
+					<td id="tableId"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Registration Number:</td>
+					<td id="tableRegNum"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Departure:</td>
+					<td id="tableDeparture"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Destination:</td>
+					<td id="tableDestination"></td>
+				</tr>
 
+				<tr>
+					<td class="Bold">Flight Model:</td>
+					<td id="tableFlightModel"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Manufacturer:</td>
+					<td id="tableManufacture"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Year:</td>
+					<td id="tableYear"></td>
+				</tr>
+				<tr>
+					<td class="Bold">Operator:</td>
+					<td id="tableOperator"></td>
+				</tr>
+				<tr>
+					<td class="Bold">In Air:</td>
+					<td id="tableInAir"></td>
+				</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<!-- User button -->
@@ -809,26 +811,28 @@
 				{
 					document.getElementById('tableId').innerText = item.info.id
 					document.getElementById('tableRegNum').innerText = item.info.registrationNumber
+					document.getElementById('tableDeparture').innerText = item.info.departure
+					document.getElementById('tableDestination').innerText = item.info.destination
 					document.getElementById('tableFlightModel').innerText = item.info.modelDescription
 					document.getElementById('tableManufacture').innerText = item.info.manufacturer
 					document.getElementById('tableYear').innerText = item.info.year
 					document.getElementById('tableOperator').innerText = item.info.operator
-					document.getElementById('tableInAir').innerText = item.info.grounded
-					document.getElementById('tableFlightcount').innerText = item.info.flightsCount
+					document.getElementById('tableInAir').innerText = item.info.grounded ? "No" : "Yes"
 
 					addPlane(item.info, "#ff0000");
 					map.setCenter(new google.maps.LatLng(item.info.latitude, item.info.longitude));
 				}
 				else
 				{
-					document.getElementById('tableId').innerText = '';
-					document.getElementById('tableRegNum').innerText = '';
-					document.getElementById('tableFlightModel').innerText = '';
-					document.getElementById('tableManufacture').innerText = '';
-					document.getElementById('tableYear').innerText = '';
-					document.getElementById('tableOperator').innerText = '';
-					document.getElementById('tableInAir').innerText = '';
-					document.getElementById('tableFlightcount').innerText = '';
+					document.getElementById('tableId').innerText = ''
+					document.getElementById('tableRegNum').innerText = ''
+					document.getElementById('tableDeparture').innerText = '';           
+					document.getElementById('tableDestination').innerText = '';
+					document.getElementById('tableFlightModel').innerText = ''
+					document.getElementById('tableManufacture').innerText = ''
+					document.getElementById('tableYear').innerText = ''
+					document.getElementById('tableOperator').innerText = ''
+					document.getElementById('tableInAir').innerText = ''
 				}
 			});
 
