@@ -70,5 +70,28 @@ namespace ProjectFlight.Controllers
 				info
 			});
 		}
+
+		/// <summary>
+		/// Get all known countries
+		/// </summary>
+		/// <returns>JSON array with countries</returns>
+	    public IActionResult GetCountries()
+	    {
+			// List to return later with all values
+			var all = new List<string>();
+
+			// Get values from db and add to list
+		    using (var context = new ApplicationDbContext())
+			{
+				var departures   = from f in context.FlightInfos where f.Departure   != null select f.DepartureCountry;
+				var destinations = from f in context.FlightInfos where f.Destination != null select f.DestinationCountry;
+				
+				all.AddRange(departures);
+				all.AddRange(destinations);
+			}
+
+			// Remove duplicates and sort them
+			return new JsonResult(all.Distinct().OrderBy(f => f));
+		}
 	}
 }
