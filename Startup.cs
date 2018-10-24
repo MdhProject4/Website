@@ -70,10 +70,9 @@ namespace ProjectFlight
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 	        
-			// Save 300 entries to the database
-			// (School network gets overloaded and crashes if higher)
+			// Start updating database
 			// TODO: Instead of logging to console, use proper ASP.NET logger
-			var updater = new FlightInfoUpdater(300, TimeSpan.FromSeconds(5));
+			var updater = new FlightInfoUpdater(TimeSpan.FromSeconds(5));
 
 			// Subscribe to some testing events
 	        updater.OnAdd     += amount => Console.WriteLine($"Added {amount} flight infos");

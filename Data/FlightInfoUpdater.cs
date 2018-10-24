@@ -35,11 +35,6 @@ namespace ProjectFlight.Data
 		/// </summary>
 		public event RefreshEvent OnRefresh;
 
-        /// <summary>
-        /// The limit of entries to add to the database
-        /// </summary>
-        private readonly int limit;
-
 		/// <summary>
 		/// Delay between each refresh
 		/// </summary>
@@ -71,11 +66,9 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Default constructor
 		/// </summary>
-		/// <param name="planeLimit">Limit on how many entries to save to the database</param>
 		/// <param name="refreshDelay">The delay between each refresh</param>
-		public FlightInfoUpdater(int planeLimit, TimeSpan refreshDelay)
+		public FlightInfoUpdater(TimeSpan refreshDelay)
         {
-            limit = planeLimit;
 	        delay = refreshDelay;
             Task.Run(() => UpdateFlightInfos());
         }
@@ -111,10 +104,6 @@ namespace ProjectFlight.Data
             var infos = new List<FlightInfo>();
             foreach (var flight in FlightInfoResponses)
 		    {
-                // Check if we've added more than our limit
-                if (infos.Count >= limit)
-                    continue;
-
                 // Add FlightInfo to list
                 var info = new FlightInfo(flight);
                 infos.Add(info);
