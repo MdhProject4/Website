@@ -29,7 +29,6 @@ namespace ProjectFlight
 	        });
 
 			// Add ApplicationDbContext to dependency injection (or in english: setup SQL)
-	        ApplicationDbContext.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
 	        services.AddDbContext<ApplicationDbContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

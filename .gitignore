@@ -263,3 +263,6 @@ __pycache__/
 
 # Ignore file with database connection info
 connection.json
+
+# Ignore database
+cats.db

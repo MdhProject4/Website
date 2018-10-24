@@ -7,12 +7,6 @@ namespace ProjectFlight.Data
 	/// </summary>
 	public class ApplicationDbContext : DbContext
 	{
-		#region Properties
-
-		public static string ConnectionString { private get; set; }
-
-		#endregion
-
 		#region Database tables
 
 		public DbSet<FlightInfo> FlightInfos { get; set; }
@@ -28,7 +22,7 @@ namespace ProjectFlight.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);
-			optionsBuilder.UseSqlServer(ConnectionString);
+			optionsBuilder.UseSqlite("Data Source=cats.db");
 		}
 	}
 }
