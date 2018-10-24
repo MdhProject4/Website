@@ -794,22 +794,13 @@
 <script>
 	function openNavmenu()
 	{
-		document.getElementById("mySidenavmenu").style.width = "370px";
-		document.getElementById("searchKlick").style.visibility = "hidden";
+		document.getElementById("mySidenavmenu").style.width    = "370px"
+		document.getElementById("searchKlick").style.visibility = "hidden"
 	}
 	function closeNav()
 	{
-		document.getElementById("mySidenavmenu").style.width = "0";
-		document.getElementById("searchKlick").style.visibility = "visible";
-	}
-	function speedStatus()
-	{
-		if (Grounded == true) {
-			document.getElementById("statusLabel ").text = "On Ground";
-		}
-		else {
-			document.getElementById("statusLabel").text = "In Air";
-		}
+		document.getElementById("mySidenavmenu").style.width    = "0"
+		document.getElementById("searchKlick").style.visibility = "visible"
 	}
 </script>
 
@@ -818,8 +809,8 @@
 	{
 		for (let i = 0; i < planes.length; i++) {
 			if (planes[i].id === id) {
-				planes[i].setMap(null);
-				planes.splice(planes, 1);
+				planes[i].setMap(null)
+				planes.splice(planes, 1)
 			}
 		}
 	}
@@ -841,30 +832,30 @@
 			.then(item => {
 				if (!item.error)
 				{
-					document.getElementById('tableId').innerText = item.info.id
-					document.getElementById('tableRegNum').innerText = item.info.registrationNumber
-					document.getElementById('tableDeparture').innerText = item.info.departure
+					document.getElementById('tableId').innerText          = item.info.id
+					document.getElementById('tableRegNum').innerText      = item.info.registrationNumber
+					document.getElementById('tableDeparture').innerText   = item.info.departure
 					document.getElementById('tableDestination').innerText = item.info.destination
 					document.getElementById('tableFlightModel').innerText = item.info.modelDescription
 					document.getElementById('tableManufacture').innerText = item.info.manufacturer
-					document.getElementById('tableYear').innerText = item.info.year
-					document.getElementById('tableOperator').innerText = item.info.operator
-					document.getElementById('tableInAir').innerText = item.info.grounded ? "No" : "Yes"
+					document.getElementById('tableYear').innerText        = item.info.year
+					document.getElementById('tableOperator').innerText    = item.info.operator
+					document.getElementById('tableInAir').innerText       = item.info.grounded ? "No" : "Yes"
 
 					addPlane(item.info, "#ff0000");
 					map.setCenter(new google.maps.LatLng(item.info.latitude, item.info.longitude));
 				}
 				else
 				{
-					document.getElementById('tableId').innerText = ''
-					document.getElementById('tableRegNum').innerText = ''
-					document.getElementById('tableDeparture').innerText = '';           
-					document.getElementById('tableDestination').innerText = '';
+					document.getElementById('tableId').innerText          = ''
+					document.getElementById('tableRegNum').innerText      = ''
+					document.getElementById('tableDeparture').innerText   = ''
+					document.getElementById('tableDestination').innerText = ''
 					document.getElementById('tableFlightModel').innerText = ''
 					document.getElementById('tableManufacture').innerText = ''
-					document.getElementById('tableYear').innerText = ''
-					document.getElementById('tableOperator').innerText = ''
-					document.getElementById('tableInAir').innerText = ''
+					document.getElementById('tableYear').innerText        = ''
+					document.getElementById('tableOperator').innerText    = ''
+					document.getElementById('tableInAir').innerText       = ''
 				}
 			});
 
