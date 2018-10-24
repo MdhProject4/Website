@@ -358,14 +358,12 @@ body {
 	width: 360px;
 	border-spacing: 3px;
 	position: relative;
-	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 }
 #DataSearching tr {
 	padding-bottom: 40px;
 	background-color: white;
 	width: 50%;
 	height: 41px;
-	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 }
 #DataSearching td {
 	border-radius: 4px;
