@@ -586,6 +586,15 @@
 	// Toggle plane notification
 	function notifyPlane(id)
 	{
+		// Try to add notification
+		fetch(`user/addNotification?id=${id}`)
+			.then(response => response.json())
+			.then(json =>
+			{
+				console.log(json)
+			})
+			.catch(error => console.log(error))
+
 		// For now, just change the icon
 		document.getElementById(`infoOptNotif_${id}`).setAttribute("d", getSvgPath("bell"))
 	}
