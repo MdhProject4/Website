@@ -101,15 +101,9 @@ namespace ProjectFlight.Data
         private void Overwrite()
         {
             // TODO: Convert the response to FlightInfo
-            var infos = new List<FlightInfo>();
-            foreach (var flight in FlightInfoResponses)
-		    {
-                // Add FlightInfo to list
-                var info = new FlightInfo(flight);
-                infos.Add(info);
-			}
+            var infos = FlightInfoResponses.Select(flight => new FlightInfo(flight)).ToList();
 
-			// Save to database and overwrite current entries
+	        // Save to database and overwrite current entries
 			WriteChanges(infos, true);
 
 			// Trigger OnAdd event
