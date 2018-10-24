@@ -127,7 +127,7 @@ namespace ProjectFlight.Controllers
 		    var bookmark = new FlightBookmark
 		    {
 			    Username = user.Username,
-			    FlightId = flightId,
+			    SavedId = flightId,
 		    };
 
 		    // Try to add it to the database
