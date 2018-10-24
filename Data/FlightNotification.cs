@@ -8,7 +8,7 @@ namespace ProjectFlight.Data
 		/// Id of the notification used by the database
 		/// </summary>
 		[Key]
-		[MaxLength(16)]
+		[MaxLength(64)]
 		public string Id { get; set; }
 
 		/// <summary>
