@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProjectFlight.Enums;
 
 namespace ProjectFlight.Data
 {
@@ -21,7 +22,9 @@ namespace ProjectFlight.Data
         /// ID of the flight
         /// </summary>
 	    [MaxLength(8)]
-        public string FlightId { get; set; }
+        public string SavedId { get; set; }
+        
+        public EBookmarkType Type { get; set; }
     }
 
 }
