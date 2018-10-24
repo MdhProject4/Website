@@ -42,6 +42,12 @@ namespace ProjectFlight.Controllers
 			    return sha.ComputeHash(Encoding.UTF8.GetBytes(input));
 	    }
 
+	    private bool TryGetUsername(out string username)
+	    {
+		    username = SessionManager.Get(HttpContext);
+		    return !string.IsNullOrEmpty(username);
+	    }
+
 		#endregion
 
 		/// <summary>
@@ -113,7 +119,6 @@ namespace ProjectFlight.Controllers
 		/// </summary>
 		/// <param name="flightId">Flight ID to save</param>
 		/// <returns>JSON response with error</returns>
-		[Authorize]
 		public IActionResult SaveFlight(string flightId)
 	    {
 		    // Try to get the user associated with the username
@@ -142,7 +147,6 @@ namespace ProjectFlight.Controllers
 		/// Get saved flight bookmarks for the current user
 		/// </summary>
 		/// <returns>JSON with array of bookmarks</returns>
-		[Authorize]
 		public IActionResult GetSavedFlights() => 
 		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == SessionManager.Get(HttpContext)));
 
@@ -151,16 +155,19 @@ namespace ProjectFlight.Controllers
 		/// </summary>
 		/// <param name="id">ID of the flight</param>
 		/// <returns>JSON response with error</returns>
-		[Authorize]
 	    public IActionResult AddNotification(string id)
 	    {
 			// TODO: Check so flightID exists
+
+			// Check so we're logged in
+		    if (!TryGetUsername(out var username))
+			    return GetResult(true);
 
 			// Add it to the database
 		    dbContext.FlightNotifications.Add(new FlightNotification
 		    {
 			    FlightId = id,
-			    Username = SessionManager.Get(HttpContext),
+			    Username = username,
 			    Notified = false
 		    });
 
@@ -183,7 +190,6 @@ namespace ProjectFlight.Controllers
 		/// Get saved notifications for the current user
 		/// </summary>
 		/// <returns>JSON array of notifications</returns>
-		[Authorize]
 	    public IActionResult GetNotifications() => 
 			new JsonResult(dbContext.FlightNotifications.Where(b => b.Username  == SessionManager.Get(HttpContext)));
     }
