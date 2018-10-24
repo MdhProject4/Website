@@ -268,6 +268,10 @@
 									<td class="infoTitle"> Model: </td>
 									<td> ${plane.modelDescription} </td>
 								</tr>
+								<tr>
+									<td class="infoTitle"> Remaining: </td>
+									<td id="infoRemaining_${plane.id}"> ... </td>
+								</tr>
 							</table>
 							<span class="infoPath"> ${plane.departureCity}, ${plane.departureCountry} -> ${plane.destinationCity}, ${plane.destinationCountry} </span>
 							<div class="infoOptions">
@@ -340,6 +344,14 @@
 			{
 				response.id = info.destinationId
 				to = addAirport(getSvgPath("airplane-landing"), response)
+			})
+
+		// Try to get estimated time remaining
+		fetch(`/api/getFlightRemaining?id=${info.id}`)
+			.then(response => response.json())
+			.then(json =>
+			{
+				document.getElementById(`infoRemaining_${info.id}`).textContent = json.error ? "¯\\_(ツ)_/¯" : `${json.time} (${Math.round(json.distance)} km)`
 			})
 
 		// When the info window is closed, remove the icons

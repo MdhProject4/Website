@@ -70,5 +70,49 @@ namespace ProjectFlight.Controllers
 				info
 			});
 		}
+
+		/// <summary>
+		/// Gets the time and estimated remaining time before a plane arrives
+		/// </summary>
+		/// <param name="id">Flight ID</param>
+		/// <returns>JSON response with error, distance and time</returns>
+	    public IActionResult GetFlightRemaining(string id)
+	    {
+		    // Temporary variable
+		    FlightInfo info;
+
+		    // Try to find flight
+		    using (var context = new ApplicationDbContext())
+			    info = context.FlightInfos.FirstOrDefault(f => f.Id == id || f.RegistrationNumber == id);
+
+			// Check if it returned a value and that Departure and Destination is set
+			if (info?.Departure == null || info.Destination == null)
+				return new JsonResult(new
+				{
+					error = true,
+					message = info == default(FlightInfo) ? "No flight info found" : info.Departure == null ? "No departure" : info.Destination == null ? "No destination" : "Unknown error"
+				});
+
+			// Calculate remaining distance (divided to get km instead of m)
+		    var destination = Maps.Find(info.Destination);
+
+		    if (Math.Abs(destination.Longitude) < 0.001f || Math.Abs(destination.Latitude) < 0.001f)
+		    {
+				return new JsonResult(new
+				{
+					error = true,
+					message = "Destination not found"
+				});
+		    }
+
+			var distance = Maps.GetDistance(new Coordinate(info.Longitude, info.Latitude), Maps.Find(info.Destination)) / 1000f;
+
+			return new JsonResult(new
+			{
+				error = false,
+				distance,
+				time = TimeSpan.FromHours(distance / info.SpeedKm).ToString(@"hh\:mm")
+			});
+		}
 	}
 }
