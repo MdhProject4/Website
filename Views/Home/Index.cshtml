@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using ProjectFlight.Controllers
 @using ProjectFlight.Data
 @{
     ViewData["Title"] = "Home Page";
@@ -193,6 +194,15 @@
 					<td> <input id="optPlaneLimit" type="number" value="50" min="1" max="1000"> </td>
 				</tr>
 			</table>
+			
+			<select id="optFilterQuery">
+				<option selected>All</option>
+				@foreach (var country in HomeController.GetCountries())
+				{
+					<option>@country</option>
+				}
+			</select>
+
 			<div class="button" onclick="showFilter(false)">Save</div>
 		</div>
 	</div>
@@ -472,7 +482,7 @@
 		const style = window.btnFilter.style
 
 		style.width  = show ? "256px" : "40px"
-		style.height = show ? "254px" : "40px"
+		style.height = show ? "278px" : "40px"
 		style.borderRadius = show ? "4px" : "2px"
 
 		// If we're closing filter options, apply changes
@@ -743,7 +753,7 @@
 		const opt = getFilterOptions()
 
 		// Return parsed url
-		return `/api/getFlights?limit=${opt.limit}&depDest=${opt.depDest}&recent=${opt.recent}&today=${opt.today}&inAir=${opt.inAir}`
+		return `/api/getFlights?limit=${opt.limit}&depDest=${opt.depDest}&recent=${opt.recent}&today=${opt.today}&inAir=${opt.inAir}&query=${opt.filter}`
 	}
 
 	// Get filter options
@@ -754,7 +764,8 @@
 			recent:  window.optRecent.checked,
 			today:   window.optToday.checked,
 			inAir:   window.optInAir.checked,
-			limit:   window.optPlaneLimit.value
+			limit: window.optPlaneLimit.value,
+			filter: window.optFilterQuery.value === "All" ? "" : window.optFilterQuery.value
 		}
 	}
 </script>

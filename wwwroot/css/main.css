@@ -197,6 +197,17 @@ body {
 	opacity: 0;
 	transition: opacity 0.2s ease-in-out;
 }
+#filterOptions select {
+	border: 0;
+	background-color: rgba(0, 0, 0, 0);
+	color: black;
+	margin-top: 8px;
+	border-bottom: 2px solid rgba(100, 100, 100, 0.6);
+}
+#filterOptions option {
+	background-color: #666666;
+	color: white;
+}
 
 /* Text/button to switch from login to register */
 #btnUser .btnUserOption {
