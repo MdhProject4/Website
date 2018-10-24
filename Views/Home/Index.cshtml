@@ -594,44 +594,32 @@
 	}
 
 	// Add notification to account menu
-	function addAccountNotificaion(id, time)
+	function addAccountNotification(id, time)
 	{
-		/*
-			<div class="accNotification">
-				<svg viewBox="0 0 24 24">
-					<path fill="#666666" d="M2.5,19H21.5V21H2.5V19M9.68,13.27L14.03,14.43L19.34,15.85C20.14,16.06 20.96,15.59 21.18,14.79C21.39,14 20.92,13.17 20.12,12.95L14.81,11.53L12.05,2.5L10.12,2V10.28L5.15,8.95L4.22,6.63L2.77,6.24V11.41L4.37,11.84L9.68,13.27Z"/>
-				</svg>
-				<span>0000<br>00:00 remaining</span>
-				<svg viewBox="0 0 24 24">
-					<path fill="#666666" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-				</svg>
-			</div>
-		*/
-
 		// Main notification container
 		const notif = document.createElement("div")
 		notif.className = "accNotification"
 
 		// Plane icon
-		const icPlane = document.createElement("svg")
-		icPlane.setAttribute("viewBox", "0 0 24 24")
-
-		const icPlanePath = document.createElement("path")
-		icPlane.setAttribute("fill", "#000000")
-		icPlane.setAttribute("d", getSvgPath("airplane-landing"))
-		icPlane.appendChild(icPlanePath)
+		const icPlane = document.createElement("img")
+		icPlane.src = "/img/airplane-landing.svg"
 		notif.appendChild(icPlane)
 
 		// Text
 		const info = document.createElement("span")
-		info.innerHTML = `${id}<br>${time}`
+		info.innerHTML = `${id}<br>${time} remaining`
 		notif.appendChild(info)
+
+		// Delete icon
+		const icDelete = document.createElement("img")
+		icDelete.src = "/img/delete.svg"
+		notif.appendChild(icDelete)
 
 		// Add notification to contaienr
 		window.accountNotifications.appendChild(notif)
 	}
 	// TESTING
-	addAccountNotificaion("0000", "00:00")
+	addAccountNotification("0000", "00:00")
 
 	// Neater way get svg paths
 	function getSvgPath(icon)
