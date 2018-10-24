@@ -135,6 +135,27 @@ body {
 	display: none;
 }
 
+.accNotification {
+	background-color: #e0e0e0;
+	border-radius: 8px;
+	/* For some reason we can't use % here */
+	width: 180px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
+	padding: 2px;
+}
+.accNotification span {
+	font-size: 12px;
+	color: #666666;
+}
+.accNotification td {
+	padding: 0;
+	margin: 0;
+}
+
 /* Button for opening the filter options */
 #btnFilter {
 	right: 0;
