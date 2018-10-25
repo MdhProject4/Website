@@ -242,7 +242,6 @@
 		if (typeof color === "undefined") {
 			color = "#ffffff"
 		}
-
 		// Create the info window for when clicking on the marker
 		const infoWindow = new google.maps.InfoWindow({
 			content: `
@@ -411,7 +410,7 @@
 		planes.forEach(plane => plane.setMap(null))
 		// Empty the planes array
 		planes.length = 0
-	}
+    }
 
 	// Shows or hides the login dialog
 	function showLogin(show)

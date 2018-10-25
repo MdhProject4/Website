@@ -227,7 +227,7 @@ body {
 	width: 80%;
 	max-width: 320px;
 }
-#searchInput {
+/*#searchInput {
 	background-color: white;
 	color: black;
 	border: 0;
@@ -239,7 +239,7 @@ body {
 	background-repeat: no-repeat;
 	background-position-y: center;
 	background-position-x: 98%;
-}
+}*/
 
 /* Main main being replaced by Google Maps iframe */
 #mapContainer, #map {
@@ -345,7 +345,7 @@ body {
 	top: 46px;
 	right: 60px;
 }
-#selectBar {
+/*#selectBar {
 	background-color: white;
 	border: none;
 	border-radius: 2px;
@@ -354,7 +354,7 @@ body {
 	position: relative;
 	width: 166px;
 	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
-}
+}*/
 #searchKlick {
 	height: 40px;
 	width: 127px;
