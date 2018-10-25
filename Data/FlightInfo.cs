@@ -29,6 +29,11 @@ namespace ProjectFlight.Data
 		public DateTime FirstSeen { get; set; }
 
 		/// <summary>
+		/// First seen as a slightly nicer formatted string
+		/// </summary>
+		public string FirstSeenString => FirstSeen.ToString("g");
+
+		/// <summary>
 		/// Time the aircraft has been tracked for
 		/// </summary>
 		public TimeSpan Tracked { get; set; }

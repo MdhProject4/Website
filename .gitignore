@@ -266,3 +266,4 @@ connection.json
 
 # Ignore database
 cats.db
+cats.db-journal
