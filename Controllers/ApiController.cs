@@ -107,11 +107,13 @@ namespace ProjectFlight.Controllers
 
 			var distance = Maps.GetDistance(new Coordinate(info.Longitude, info.Latitude), Maps.Find(info.Destination)) / 1000f;
 
+		    var hours = distance / info.SpeedKm;
+
 			return new JsonResult(new
 			{
 				error = false,
 				distance,
-				time = TimeSpan.FromHours(distance / info.SpeedKm).ToString(@"hh\:mm")
+				time = hours < 24 ? TimeSpan.FromHours(hours).ToString(@"hh\:mm") : "24:00+" // TODO: TimeSpan can get too large
 			});
 		}
 	}

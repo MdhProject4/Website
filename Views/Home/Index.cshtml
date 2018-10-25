@@ -464,6 +464,8 @@
 		window.accountBookmarks.style.display = "none"
 		window.accountSettings.style.display = "none"
 
+		// Update content
+		updateAccountTab(index)
 
 		// Then set the correct highlighted
 		switch (index)
@@ -482,6 +484,33 @@
 				window.accSettingsIcon.setAttribute("d", getSvgPath("settings"))
 				window.accountSettings.style.display = "block"
 				break
+		}
+	}
+
+	function updateAccountTab(index)
+	{
+		switch (index)
+		{
+			case 0:
+				removeChildren(window.accountNotifications)
+				fetch("/user/getNotifications")
+					.then(response => response.json())
+					.then(json =>
+					{
+						json.forEach(item =>
+						{
+							fetch(`/api/getFlightRemaining?id=${item.flightId}`)
+								.then(response => response.json())
+								.then(json2 => addAccountNotification(item.flightId, json2.time))
+						})
+					})
+		}
+	}
+
+	function removeChildren(element)
+	{
+		while (element.firstChild) {
+			element.removeChild(element.firstChild)
 		}
 	}
 
@@ -647,11 +676,9 @@
 		icDelete.src = "/img/delete.svg"
 		notif.appendChild(icDelete)
 
-		// Add notification to contaienr
+		// Add notification to container
 		window.accountNotifications.appendChild(notif)
 	}
-	// TESTING
-	addAccountNotification("0000", "00:00")
 
 	// Neater way get svg paths
 	function getSvgPath(icon)
