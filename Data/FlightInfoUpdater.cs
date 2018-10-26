@@ -170,10 +170,11 @@ namespace ProjectFlight.Data
                         info.Tracked = TimeSpan.Parse("23:59:59.9999999");
 
 					// Make sure it can be added to the database
-	                var errors = info.Validate();
+	                var errors = info.Validate().ToArray();
+
 					// TODO: For now, throw an exception
 	                if (errors.Any())
-		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields");
+		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields ({string.Join(" ", errors)})");
 
 	                context.FlightInfos.Add(info);
                 }
