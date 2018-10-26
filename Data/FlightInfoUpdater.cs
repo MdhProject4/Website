@@ -22,8 +22,8 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// When the flight infos gets updated
 		/// </summary>
-		/// <param name="amount">Amount of flights that got updated</param>
-		public delegate void RefreshEvent(int amount);
+		/// <param name="refreshed">Flights that got updated</param>
+		public delegate void RefreshEvent(IEnumerable<FlightInfo> refreshed);
 
 		/// <summary>
 		/// When the initial flight infos gets replaced
@@ -119,13 +119,12 @@ namespace ProjectFlight.Data
 			// We convert it to a dictionary to search in it faster
             var newFlights = FlightInfoResponses.ToDictionary(f => f.Icao);
 
-			// Changes made to the database
-	        int changes;
+			// List with all updated values
+			var updates = new List<FlightInfo>();
 
             using (var context = new ApplicationDbContext())
             {
 				// Loop through all existing planes and try to update them
-
 	            foreach (var info in context.FlightInfos)
 	            {
 		            // Try to find it in the list of all flights
@@ -133,19 +132,25 @@ namespace ProjectFlight.Data
 		            {
 						// Get the new value
 			            var updated = newFlights[info.Id];
+						
+			            if (Math.Abs(info.Latitude - updated.Lat) > 0.001f || Math.Abs(info.Longitude - updated.Long) > 0.001f)
+			            {
+							// Update position
+				            info.Latitude  = updated.Lat;
+				            info.Longitude = updated.Long;
 
-						// For now at least, only update position
-			            info.Latitude  = updated.Lat;
-			            info.Longitude = updated.Long;
+				            // Add to updates list
+				            updates.Add(info);
+			            }
 		            }
 	            }
 
 				// Update database
-	            changes = context.SaveChanges();
+	            context.SaveChanges();
             }
 
 			// Trigger OnRefresh event
-			OnRefresh?.Invoke(changes);
+			OnRefresh?.Invoke(updates);
         }
 
         /// <summary>

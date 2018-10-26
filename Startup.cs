@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectFlight.Data;
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ProjectFlight
@@ -71,12 +72,12 @@ namespace ProjectFlight
             });
 	        
 			// Start updating database
-			// TODO: Instead of logging to console, use proper ASP.NET logger
 			var updater = new FlightInfoUpdater(TimeSpan.FromSeconds(5));
 
 			// Subscribe to some testing events
-	        updater.OnAdd     += amount => Console.WriteLine($"Added {amount} flight infos");
-	        updater.OnRefresh += amount => Console.WriteLine($"Refreshed {amount} flight infos");
+	        // TODO: Instead of logging to console, use proper ASP.NET logger
+			updater.OnAdd     += amount  => Console.WriteLine($"Added {amount} flight infos");
+	        updater.OnRefresh += updates => Console.WriteLine($"Refreshed {updates.Count()} flight infos");
         }
     }
 }
