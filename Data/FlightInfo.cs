@@ -175,7 +175,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Departure ID. Null if <see cref="Departure"/> is null
 		/// </summary>
-		public string DepartureId => Departure.Split(' ')[0];
+		public string DepartureId => Departure?.Split(' ')[0];
 
 		/// <summary>
 		/// Code and name of destination airport
@@ -196,7 +196,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Destination ID. Null if <see cref="Departure"/> is null
 		/// </summary>
-		public string DestinationId => Destination.Split(' ')[0];
+		public string DestinationId => Destination?.Split(' ')[0];
 
 		/// <summary>
 		/// If the aircraft is grounded
