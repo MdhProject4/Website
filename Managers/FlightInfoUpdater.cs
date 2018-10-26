@@ -1,12 +1,13 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using ProjectFlight.Data;
 
-namespace ProjectFlight.Data
+namespace ProjectFlight.Managers
 {
 	/// <summary>
 	/// Updates the flight info database in the background

@@ -9,6 +9,7 @@ using System;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ProjectFlight.Managers;
 
 namespace ProjectFlight
 {
