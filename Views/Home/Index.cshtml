@@ -241,7 +241,7 @@
 	{
 		if (typeof color === "undefined") {
 			color = "#ffffff"
-		}
+        }
 		// Create the info window for when clicking on the marker
 		const infoWindow = new google.maps.InfoWindow({
 			content: `
@@ -289,9 +289,6 @@
 					`
 		})
 
-		// Remove if already on map
-		// TODO: This will be very slow when adding lots of planes
-		removePlane(plane.id)
 
 		// Create the marker itself
 		const marker = new google.maps.Marker({
@@ -831,15 +828,7 @@
 </script>
 
 <script>
-	function removePlane(id)
-	{
-		for (let i = 0; i < planes.length; i++) {
-			if (planes[i].id === id) {
-				planes[i].setMap(null)
-				planes.splice(planes, 1)
-			}
-		}
-	}
+
 	function getFlight()
 	{
 		const id = document.getElementById("searchInput2").value
@@ -847,7 +836,7 @@
 		for (let i = 0; i < planes.length; i++) {
 			if (planes[i].icon.fillColor === "#ff0000") {
 				const icon = planes[i].getIcon()
-				icon.fillColor = "#ffffff"
+				icon.fillColor= "#ffffff"
 				planes[i].setIcon(icon)
 				break
 			}
@@ -868,7 +857,17 @@
 					document.getElementById('tableOperator').innerText    = item.info.operator
 					document.getElementById('tableInAir').innerText       = item.info.grounded ? "No" : "Yes"
 
-					addPlane(item.info, "#ff0000");
+
+
+                    for (let i = 0; i < planes.length; i++) {
+                        if (planes[i].id == id ) {
+                            const icon = planes[i].getIcon()
+                            icon.fillColor= "#ff0000"
+                            planes[i].setIcon(icon)
+                            continue
+                        }
+                    }
+
 					map.setCenter(new google.maps.LatLng(item.info.latitude, item.info.longitude));
 				}
 				else
