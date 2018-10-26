@@ -626,17 +626,20 @@
 	// Toggle plane notification
 	function notifyPlane(id)
 	{
-		// Try to add notification
-		fetch(`user/addNotification?id=${id}`)
+		// Toggle notification
+		fetch(`user/toggleNotification?id=${id}`)
 			.then(response => response.json())
 			.then(json =>
 			{
 				console.log(json)
+
+				// Change icon depending on if it was added or removed
+				document.getElementById(`infoOptNotif_${id}`).setAttribute("d", json.added ? getSvgPath("bell") : getSvgPath("bell-outline"))
+
+				// Refresh notifications
+				updateAccountTab(0)
 			})
 			.catch(error => console.log(error))
-
-		// For now, just change the icon
-		document.getElementById(`infoOptNotif_${id}`).setAttribute("d", getSvgPath("bell"))
 	}
 
 	// Toggle plane bookmark
@@ -673,6 +676,8 @@
 		// Delete icon
 		const icDelete = document.createElement("img")
 		icDelete.src = "/img/delete.svg"
+		icDelete.className = "accDeleteNotification"
+		icDelete.addEventListener("click", () => notifyPlane(id))
 		notif.appendChild(icDelete)
 
 		// Add notification to container

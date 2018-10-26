@@ -157,6 +157,9 @@ body {
 	height: 18px;
 	margin: 11px;
 }
+.accDeleteNotification {
+	cursor: pointer;
+}
 
 /* Button for opening the filter options */
 #btnFilter {
