@@ -149,41 +149,47 @@ namespace ProjectFlight.Controllers
 		public IActionResult GetSavedFlights() => 
 		    new JsonResult(dbContext.FlightBookmarks.Where(b => b.Username == SessionManager.Get(HttpContext)));
 
-	    /// <summary>
-	    /// Adds a notification about a flight to a user
+		/// <summary>
+	    /// Toggles a flight notification for a user
 	    /// </summary>
 	    /// <param name="id">ID of the flight</param>
-	    /// <returns>JSON response with error</returns>
-	    public IActionResult AddNotification(string id)
-	    {
-			// TODO: Check so flightID exists
-
+	    /// <returns>JSON response with error and added</returns>
+		public IActionResult ToggleNotification(string id)
+		{
 			// Check so we're logged in
 		    if (!TryGetUsername(out var username))
 			    return GetResult(true);
 
-			// Add it to the database
-		    dbContext.FlightNotifications.Add(new FlightNotification
-		    {
-			    FlightId = id,
-			    Username = username,
-			    Notified = false
-		    });
+			// If the plane was added
+			var added = false;
 
-			// Try to save
-		    var error = false;
-		    try
-		    {
-			    dbContext.SaveChanges();
-		    }
-		    catch (SqlException)
-		    {
-			    error = true;
-		    }
+			// See if we already have an entry
+			var entry = dbContext.FlightNotifications.FirstOrDefault(f => f.FlightId == id);
 
-			// Return if it was successful
-		    return GetResult(error);
-	    }
+			// If found, delete it, else, add a new one
+			if (entry != default(FlightNotification))
+				dbContext.FlightNotifications.Remove(entry);
+			else
+			{
+				dbContext.FlightNotifications.Add(new FlightNotification
+				{
+					FlightId = id,
+					Username = username,
+					Notified = false
+				});
+
+				added = true;
+			}
+
+			// Apply changes and see how many rows were affected
+			var changes = dbContext.SaveChanges();
+
+			// If 0 rows were affected, something didn't work
+			return new JsonResult(new {
+				error = changes == 0,
+				added
+			});
+		}
 
 		/// <summary>
 		/// Get saved notifications for the current user
