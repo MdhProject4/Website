@@ -15,6 +15,12 @@
 		user = SessionManager.GetUser(httpContext);
 	}
 	var signedIn = user != null;
+
+	// SVGs to make the HTML cleaner
+	const string svgDefault = "M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z";
+	const string svgUser    = "M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z";
+	const string svgClose   = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z";
+	const string svgFilter  = "M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z";
 }
 
 <div id="mapContainer">
@@ -82,7 +88,7 @@
 										   @:showLogin(true);
 		                               }">
 			<svg viewBox="0 0 24 24">
-				<path fill="#666666" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+				<path fill="#666666" d="@svgUser" />
 			</svg>
 		</div>
 		<div id="btnUserError"> ¯\_(ツ)_/¯ </div>
@@ -130,25 +136,25 @@
 				<!-- Notifications icon -->
 				<div class="accOption" onclick="setAccountTab(0)">
 					<svg viewBox="0 0 24 24">
-						<path id="accNotificationsIcon" fill="#666666" d=""/>
+						<path id="accNotificationsIcon" fill="#666666" d="@svgDefault"/>
 					</svg>
 				</div>
 				<!-- Bookmarks icon -->
 				<div class="accOption" onclick="setAccountTab(1)">
 					<svg viewBox="0 0 24 24">
-						<path id="accBookmarksIcon" fill="#666666" d="" />
+						<path id="accBookmarksIcon" fill="#666666" d="@svgDefault" />
 					</svg>
 				</div>
 				<!-- Settings icon -->
 				<div class="accOption" onclick="setAccountTab(2)">
 					<svg viewBox="0 0 24 24">
-						<path id="accSettingsIcon" fill="#666666" d=""/>
+						<path id="accSettingsIcon" fill="#666666" d="@svgDefault"/>
 					</svg>
 				</div>
 				<!-- Close icon -->
 				<div class="accOption" onclick="showAccount(false)">
 					<svg viewBox="0 0 24 24">
-						<path fill="#666666" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+						<path fill="#666666" d="@svgClose"/>
 					</svg>
 				</div>
 			</div>
@@ -169,7 +175,7 @@
 	<div id="btnFilter" class="control">
 		<div id="btnFilterIcon" onclick="showFilter(true)">
 			<svg viewBox="0 0 24 24">
-				<path fill="#666666" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" />
+				<path fill="#666666" d="@svgFilter" />
 			</svg>
 		</div>
 		<div id="filterOptions">
