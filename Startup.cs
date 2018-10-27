@@ -71,6 +71,10 @@ namespace ProjectFlight
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+			// Setup WebSockets for notification delivery
+	        app.UseWebSockets();
+	        app.Use(async (context, next) => await NotificationManager.Handle(context, next));
 	        
 			// Start updating database
 			var updater = new FlightInfoUpdater(TimeSpan.FromSeconds(5));
