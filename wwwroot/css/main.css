@@ -322,7 +322,6 @@ body {
 	border: 0;
 	border-radius: 2px;
 	padding: 8px 32px 8px 8px;
-	width: 100%;
 	box-shadow: rgba(0, 0, 0, 0.3) 0 1px 4px -1px;
 	background-image: url("/img/magnify.svg");
 	background-repeat: no-repeat;
