@@ -844,7 +844,7 @@
 
 	function getFlight()
 	{
-		const id = document.getElementById("searchInput2").value
+        const id = document.getElementById("searchInput2").value.trim()
 
 		for (let i = 0; i < planes.length; i++) {
 			if (planes[i].icon.fillColor === "#ff0000") {
@@ -854,6 +854,11 @@
 				break
 			}
 		}
+
+        if (id.length === 0) {
+            clearSidebarInfo()
+            return
+        }
 
 		fetch(`/api/getFlight?id=${id}`)
 			.then(response => response.json())
@@ -885,18 +890,20 @@
 				}
 				else
 				{
-					document.getElementById('tableId').innerText          = ''
-					document.getElementById('tableRegNum').innerText      = ''
-					document.getElementById('tableDeparture').innerText   = ''
-					document.getElementById('tableDestination').innerText = ''
-					document.getElementById('tableFlightModel').innerText = ''
-					document.getElementById('tableManufacture').innerText = ''
-					document.getElementById('tableYear').innerText        = ''
-					document.getElementById('tableOperator').innerText    = ''
-					document.getElementById('tableInAir').innerText       = ''
+                    clearSidebarInfo()
 				}
 			});
-
+        function clearSidebarInfo() {
+            document.getElementById('tableId').innerText = ''
+            document.getElementById('tableRegNum').innerText = ''
+            document.getElementById('tableDeparture').innerText = ''
+            document.getElementById('tableDestination').innerText = ''
+            document.getElementById('tableFlightModel').innerText = ''
+            document.getElementById('tableManufacture').innerText = ''
+            document.getElementById('tableYear').innerText = ''
+            document.getElementById('tableOperator').innerText = ''
+            document.getElementById('tableInAir').innerText = ''
+        }
 	}
 </script>
 
