@@ -17,12 +17,18 @@ namespace ProjectFlight.Managers
 		private static Dictionary<string, WebSocket> users;
 
 		/// <summary>
+		/// Cache for airport locations
+		/// </summary>
+		private static Dictionary<string, Coordinate> airports;
+
+		/// <summary>
 		/// Sets everything up, like a constructor sort of
 		/// </summary>
 		public static void Create()
 		{
-			// Create users dictionary
-			users = new Dictionary<string, WebSocket>();
+			// Create dictionaries
+			users    = new Dictionary<string, WebSocket>();
+			airports = new Dictionary<string, Coordinate>();
 
 			// Check database for old entries
 			// (compares flight infos with notifications)
@@ -43,6 +49,34 @@ namespace ProjectFlight.Managers
 				if (changes > 0)
 					Console.WriteLine($"Removed {changes} invalid {(changes == 1 ? "notification" : "notifications")}");
 			}
+		}
+
+		/// <summary>
+		/// Fills airport cache dictionary
+		/// </summary>
+		// TODO: This cache could be saved in the database
+		private static void UpdateAirportCache(IEnumerable<FlightNotification> notifications)
+		{
+			// Loop through all notifications
+			foreach (var notification in notifications)
+			{
+				// Get full flight info
+				var flightInfo = GetFlightInfo(notification.FlightId);
+
+				// Check departure
+				if (!airports.ContainsKey(flightInfo.DepartureId))
+					airports[flightInfo.DepartureId] = Maps.Find(flightInfo.Departure);
+
+				// Check destination
+				if (!airports.ContainsKey(flightInfo.DestinationId))
+					airports[flightInfo.DestinationId] = Maps.Find(flightInfo.Destination);
+			}
+		}
+
+		private static FlightInfo GetFlightInfo(string id)
+		{
+			using (var context = new ApplicationDbContext())
+				return context.FlightInfos.FirstOrDefault(f => f.Id == id);
 		}
 
 		/// <summary>
