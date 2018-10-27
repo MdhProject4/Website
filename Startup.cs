@@ -43,15 +43,8 @@ namespace ProjectFlight
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 			// Check database
-	        try
-	        {
-		        using (var context = new ApplicationDbContext())
-			        context.Database.EnsureCreated();
-	        }
-	        catch (SqlException e)
-	        {
-				Console.WriteLine($"SQL Error: {e.Message}");
-	        }
+			using (var context = new ApplicationDbContext())
+				context.Database.EnsureCreated();
 
 	        if (env.IsDevelopment())
 		        app.UseDeveloperExceptionPage();
