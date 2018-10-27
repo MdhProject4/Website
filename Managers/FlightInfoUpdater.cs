@@ -1,11 +1,11 @@
+using Newtonsoft.Json;
+using ProjectFlight.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using ProjectFlight.Data;
 
 namespace ProjectFlight.Managers
 {
@@ -71,7 +71,13 @@ namespace ProjectFlight.Managers
 		public FlightInfoUpdater(TimeSpan refreshDelay)
         {
 	        delay = refreshDelay;
-            Task.Run(() => UpdateFlightInfos());
+
+	        // Overwrite all current entries (before starting the rest)
+			Console.Write("Updating flight infos... ");
+	        Overwrite();
+	        Console.WriteLine("Done!");
+
+			Task.Run(() => UpdateFlightInfos());
         }
 		
 		/// <summary>
@@ -84,9 +90,6 @@ namespace ProjectFlight.Managers
 		/// </summary>
 		private void UpdateFlightInfos()
 		{
-            // First overwrite all current entries
-            Overwrite();
-
             // Start refresh loop
 			running = true;
             while (running)
