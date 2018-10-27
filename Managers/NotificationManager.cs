@@ -38,9 +38,10 @@ namespace ProjectFlight.Managers
 						context.FlightNotifications.Remove(notification);
 				}
 
-				// Save changes
+				// Save changes and log results
 				var changes = context.SaveChanges();
-				Console.WriteLine($"Removed {changes} invalid {(changes == 1 ? "notification" : "notifications")}");
+				if (changes > 0)
+					Console.WriteLine($"Removed {changes} invalid {(changes == 1 ? "notification" : "notifications")}");
 			}
 		}
 
