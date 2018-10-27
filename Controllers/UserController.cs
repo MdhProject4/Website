@@ -50,6 +50,21 @@ namespace ProjectFlight.Controllers
 		#endregion
 
 		/// <summary>
+		/// Basic 'who am i' like response
+		/// </summary>
+		/// <returns>JSON response with error and user</returns>
+	    public IActionResult Index()
+	    {
+		    var username = SessionManager.Get(HttpContext);
+
+		    return new JsonResult(new
+		    {
+			    error = username == null,
+			    user  = username
+		    });
+	    }
+
+		/// <summary>
 		/// Tries to login the user with the specified username and password
 		/// </summary>
 		/// <param name="username">User's username</param>
