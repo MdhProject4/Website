@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectFlight.Data;
+using ProjectFlight.Managers;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using ProjectFlight.Managers;
 
 namespace ProjectFlight.Controllers
 {

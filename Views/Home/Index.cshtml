@@ -76,9 +76,10 @@
 	<!-- User button -->
 	<div id="btnUser" class="control">
 		<div id="btnUserIcon" onclick="@if (signedIn) {
-										   @:showAccount(true)
+										   // Semicolon here to fix a warning
+			                               @:showAccount(true);
 		                               } else {
-										   @:showLogin(true)
+										   @:showLogin(true);
 		                               }">
 			<svg viewBox="0 0 24 24">
 				<path fill="#666666" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
@@ -221,7 +222,7 @@
 
 	function loadMap()
 	{
-		map = new google.maps.Map(window.map,
+		map = new window.google.maps.Map(window.map,
 			{
 				// MDH location
 				center: {
@@ -232,7 +233,7 @@
 				disableDefaultUI: true
 			})
 
-		places = new google.maps.places.PlacesService(map)
+		places = new window.google.maps.places.PlacesService(map)
 
 		getFlights()
 	}
@@ -244,7 +245,7 @@
 			color = "#ffffff"
         }
 		// Create the info window for when clicking on the marker
-		const infoWindow = new google.maps.InfoWindow({
+		const infoWindow = new window.google.maps.InfoWindow({
 			content: `
 						<div class="flightInfoWindow">
 							<table>
@@ -292,7 +293,7 @@
 
 
 		// Create the marker itself
-		const marker = new google.maps.Marker({
+		const marker = new window.google.maps.Marker({
 			position: {
 				lat: plane.latitude,
 				lng: plane.longitude
@@ -366,7 +367,7 @@
 
 	function addAirport(path, info)
 	{
-		const infoWindow = new google.maps.InfoWindow({
+		const infoWindow = new window.google.maps.InfoWindow({
 			content:
 				`
 					<div class="flightInfoWindow">
@@ -380,7 +381,7 @@
 				`
 		})
 
-		const marker = new google.maps.Marker({
+		const marker = new window.google.maps.Marker({
 			position: {
 				lat: info.lat,
 				lng: info.lng
@@ -715,7 +716,7 @@
 		{
 			places.findPlaceFromQuery(request, (results, status) =>
 			{
-				if (status !== google.maps.places.PlacesServiceStatus.OK) {
+				if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
 					reject("No results found")
 				} else {
 					resolve({
@@ -866,7 +867,7 @@
 
 
                     for (let i = 0; i < planes.length; i++) {
-                        if (planes[i].id == id ) {
+                        if (planes[i].id === id ) {
                             const icon = planes[i].getIcon()
                             icon.fillColor= "#ff0000"
                             planes[i].setIcon(icon)
@@ -874,7 +875,7 @@
                         }
                     }
 
-					map.setCenter(new google.maps.LatLng(item.info.latitude, item.info.longitude));
+					map.setCenter(new window.google.maps.LatLng(item.info.latitude, item.info.longitude));
 				}
 				else
 				{
