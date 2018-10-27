@@ -27,11 +27,6 @@ namespace ProjectFlight.Managers
 		public delegate void RefreshEvent(IEnumerable<FlightInfo> refreshed);
 
 		/// <summary>
-		/// When the initial flight infos gets replaced
-		/// </summary>
-		public event AddEvent OnAdd;
-
-		/// <summary>
 		/// When the flight infos gets updated
 		/// </summary>
 		public event RefreshEvent OnRefresh;
@@ -72,10 +67,10 @@ namespace ProjectFlight.Managers
         {
 	        delay = refreshDelay;
 
-	        // Overwrite all current entries (before starting the rest)
+	        // Overwrite all current entries
 			Console.Write("Updating flight infos... ");
 	        Overwrite();
-	        Console.WriteLine("Done!");
+	        Console.WriteLine("Close enough!");
 
 			Task.Run(() => UpdateFlightInfos());
         }
@@ -109,9 +104,6 @@ namespace ProjectFlight.Managers
 
 	        // Save to database and overwrite current entries
 			WriteChanges(infos, true);
-
-			// Trigger OnAdd event
-			OnAdd?.Invoke(infos.Count);
 		}
 
         /// <summary>
