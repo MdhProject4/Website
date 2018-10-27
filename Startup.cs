@@ -76,6 +76,9 @@ namespace ProjectFlight
 	        // TODO: Instead of logging to console, use proper ASP.NET logger
 			updater.OnAdd     += amount  => Console.WriteLine($"Added {amount} flight infos");
 	        updater.OnRefresh += updates => Console.WriteLine($"Refreshed {updates.Count()} flight infos");
+
+			// Create notification manager
+			NotificationManager.Create();
         }
     }
 }

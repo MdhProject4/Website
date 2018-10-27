@@ -17,6 +17,34 @@ namespace ProjectFlight.Managers
 		private static Dictionary<string, WebSocket> users;
 
 		/// <summary>
+		/// Sets everything up, like a constructor sort of
+		/// </summary>
+		public static void Create()
+		{
+			// Create users dictionary
+			users = new Dictionary<string, WebSocket>();
+
+			// Check database for old entries
+			// (compares flight infos with notifications)
+			using (var context = new ApplicationDbContext())
+			{
+				// Create local copy so we can iterate it while deleting from database
+				var notifications = context.FlightNotifications;
+
+				// Check notifications
+				foreach (var notification in notifications)
+				{
+					if (!context.FlightInfos.Any(f => f.Id == notification.FlightId))
+						context.FlightNotifications.Remove(notification);
+				}
+
+				// Save changes
+				var changes = context.SaveChanges();
+				Console.WriteLine($"Removed {changes} invalid {(changes == 1 ? "notification" : "notifications")}");
+			}
+		}
+
+		/// <summary>
 		/// Update and check if any notifications should be sent
 		/// </summary>
 		/// <param name="infos"></param>
