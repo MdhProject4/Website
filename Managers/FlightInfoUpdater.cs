@@ -24,7 +24,7 @@ namespace ProjectFlight.Managers
 		/// When the flight infos gets updated
 		/// </summary>
 		/// <param name="refreshed">Flights that got updated</param>
-		public delegate void RefreshEvent(IEnumerable<FlightInfo> refreshed);
+		public delegate void RefreshEvent(FlightInfo[] refreshed);
 
 		/// <summary>
 		/// When the flight infos gets updated
@@ -146,7 +146,7 @@ namespace ProjectFlight.Managers
             }
 
 			// Trigger OnRefresh event
-			OnRefresh?.Invoke(updates);
+			OnRefresh?.Invoke(updates.ToArray());
         }
 
         /// <summary>
