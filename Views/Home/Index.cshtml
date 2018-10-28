@@ -159,9 +159,7 @@
 				</div>
 			</div>
 			<!-- Notifications -->
-			<div id="accountNotifications" class="accTabContent">
-				<!-- <span class="accInfo"> No notifications :( </span> -->
-			</div>
+			<div id="accountNotifications" class="accTabContent"></div>
 			<!-- Bookmarks -->
 			<div id="accountBookmarks" class="accTabContent">
 				<span class="accInfo"> No bookmarks :( </span>
@@ -498,19 +496,23 @@
 	{
 		switch (index)
 		{
-		case 0:
-			removeChildren(window.accountNotifications)
-			fetch("/user/getNotifications")
-				.then(response => response.json())
-				.then(json =>
-				{
-					json.forEach(item =>
+			case 0:
+				removeChildren(window.accountNotifications)
+				fetch("/user/getNotifications")
+					.then(response => response.json())
+					.then(json =>
 					{
-						fetch(`/api/getFlightRemaining?id=${item.flightId}`)
-							.then(response => response.json())
-							.then(json2 => addAccountNotification(item.flightId, json2.time))
+						if (json.length <= 0) {
+							addText(window.accountNotifications, "No notifications :(", "accInfo")
+						} else {
+							json.forEach(item =>
+							{
+								fetch(`/api/getFlightRemaining?id=${item.flightId}`)
+									.then(response => response.json())
+									.then(json2 => addAccountNotification(item.flightId, json2.time))
+							})
+						}
 					})
-				})
 		}
 	}
 
@@ -519,6 +521,15 @@
 		while (element.firstChild) {
 			element.removeChild(element.firstChild)
 		}
+	}
+
+	// Adds a span of text to the parent element
+	function addText(element, text, className)
+	{
+		const span = document.createElement("span")
+		span.className = className
+		span.textContent = text
+		element.appendChild(span)
 	}
 
 	// Shows or hides the filter options
