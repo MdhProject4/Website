@@ -650,10 +650,11 @@
 			.then(response => response.json())
 			.then(json =>
 			{
-				console.log(json)
-
-				// Change icon depending on if it was added or removed
-				document.getElementById(`infoOptNotif_${id}`).setAttribute("d", json.added ? getSvgPath("bell") : getSvgPath("bell-outline"))
+				// Change icon (if shown) depending on if it was added or removed
+				const icon = document.getElementById(`infoOptNotif_${id}`)
+				if (icon) {
+					icon.setAttribute("d", json.added ? getSvgPath("bell") : getSvgPath("bell-outline"))
+				}
 
 				// Refresh notifications
 				updateAccountTab(0)
