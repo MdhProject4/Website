@@ -73,7 +73,11 @@ namespace ProjectFlight
 
 			// Subscribe to some testing events
 	        // TODO: Instead of logging to console, use proper ASP.NET logger
-	        updater.OnRefresh += updates => Console.WriteLine($"Refreshed {updates.Count()} flight infos");
+	        updater.OnRefresh += updates =>
+	        {
+		        NotificationManager.Update(updates);
+		        Console.WriteLine($"Refreshed {updates.Length} flight infos");
+	        };
 
 			// Create notification manager
 			NotificationManager.Create();
