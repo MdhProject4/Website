@@ -80,43 +80,45 @@ namespace ProjectFlight.Managers
 		/// Update and check if any notifications should be sent
 		/// </summary>
 		/// <param name="infos"></param>
-		public static void Update(IEnumerable<FlightInfo> infos)
+		public static void Update(FlightInfo[] infos)
 		{
-			// Get saved notifications
-			DbSet<FlightNotification> notifications;
 			using (var context = new ApplicationDbContext())
-				notifications = context.FlightNotifications;
-
-			// If it's empty, just return
-			if (!notifications.Any())
-				return;
-
-			// Update airport cache
-			UpdateAirportCache(notifications);
-
-			// Loop through notifications to try and find matches
-			foreach (var notification in notifications)
 			{
-				// Get flight info
-				// TODO: This could be slow
-				var info = GetFlightInfo(notification.FlightId);
+				// Shorthand
+				var notifications = context.FlightNotifications;
 
-				// Get time remaining
-				var distance = Maps.GetDistance(new Coordinate(info.Longitude, info.Latitude), airports[info.DestinationId]);
-				var hours = distance / info.SpeedKm;
+				// If it's empty, just return
+				if (!notifications.Any())
+					return;
 
-				// See if we should remind
-				if (hours < 1)
+				// Update airport cache
+				UpdateAirportCache(notifications);
+
+				// Loop through notifications to try and find matches
+				foreach (var notification in notifications)
 				{
-					WebSocketDeliverer.Send(notification.Username, notification.FlightId);
-					notification.Notified = true;
-				}
-			}
+					// Get flight info
+					var info = infos.FirstOrDefault(f => f.Id == notification.FlightId);
 
-			// Save changes
-			// TODO: Not sure if this works
-			using (var context = new ApplicationDbContext())
+					// If info not found, continue loop (instead of crashing)
+					if (info == null)
+						continue;
+
+					// Get time remaining
+					var distance = Maps.GetDistance(new Coordinate(info.Longitude, info.Latitude), airports[info.DestinationId]) / 1000f;
+					var hours = distance / info.SpeedKm;
+
+					// See if we should remind
+					if (hours < 1)
+					{
+						WebSocketDeliverer.Send(notification.Username, notification.FlightId);
+						notification.Notified = true;
+					}
+				}
+
+				// Save changes
 				context.SaveChanges();
+			}
 		}
 	}
 }
