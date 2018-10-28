@@ -245,9 +245,11 @@
 	// Adds a plane and draws it on the map
 	function addPlane(plane, color)
 	{
-		if (typeof color === "undefined") {
+		// If not set, default to white
+		if (!color) {
 			color = "#ffffff"
 		}
+
 		// Create the info window for when clicking on the marker
 		const infoWindow = new window.google.maps.InfoWindow({
 			content: `
@@ -686,6 +688,7 @@
 		// Plane icon
 		const icPlane = document.createElement("img")
 		icPlane.src = "/img/airplane-landing.svg"
+		icPlane.addEventListener("click", () => getFlight(id, "#ffffff"))
 		notif.appendChild(icPlane)
 
 		// Text
@@ -696,7 +699,6 @@
 		// Delete icon
 		const icDelete = document.createElement("img")
 		icDelete.src = "/img/delete.svg"
-		icDelete.className = "accDeleteNotification"
 		icDelete.addEventListener("click", () => notifyPlane(id))
 		notif.appendChild(icDelete)
 
@@ -867,9 +869,17 @@
 
 <script>
 
-	function getFlight()
+	function getFlight(id, color)
 	{
-		const id = document.getElementById("searchInput2").value.trim()
+		// If not set, default to text entered in search input
+		if (!id) {
+			id = document.getElementById("searchInput2").value.trim()
+		}
+
+		// If not set, default to red
+		if (!color) {
+			color = "#ff0000"
+		}
 
 		for (let i = 0; i < planes.length; i++) {
 			if (planes[i].icon.fillColor === "#ff0000") {
@@ -905,7 +915,7 @@
 					for (let i = 0; i < planes.length; i++) {
 						if (planes[i].id === id ) {
 							const icon = planes[i].getIcon()
-							icon.fillColor= "#ff0000"
+							icon.fillColor = color
 							planes[i].setIcon(icon)
 							continue
 						}
