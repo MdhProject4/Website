@@ -282,16 +282,19 @@
 							</table>
 							<span class="infoPath"> ${plane.departureCity}, ${plane.departureCountry} -> ${plane.destinationCity}, ${plane.destinationCountry} </span>
 							<div class="infoOptions">
-								<div title="Toggle notification" class="infoOptNotif" onclick="notifyPlane('${plane.id}')">
-									<svg viewBox="0 0 24 24">
-										<path id="infoOptNotif_${plane.id}" fill="#666666" d="${getSvgPath("bell-outline")}">
-									</svg>
-								</div>
-								<div title="Toggle bookmark" class="infoOptSave" onclick="savePlane('${plane.id}')">
-									<svg class="infoOptSave" viewBox="0 0 24 24">
-										<path id="infoOptSave_${plane.id}" fill="#666666" d="${getSvgPath("bookmark-outline")}">
-									</svg>
-								</div>
+								@if (signedIn)
+								{
+									<div title="Toggle notification" class="infoOptNotif" onclick="notifyPlane('${plane.id}')">
+										<svg viewBox="0 0 24 24">
+											<path id="infoOptNotif_${plane.id}" fill="#666666" d="${getSvgPath("bell-outline")}">
+										</svg>
+									</div>
+									<div title="Toggle bookmark" class="infoOptSave" onclick="savePlane('${plane.id}')">
+										<svg class="infoOptSave" viewBox="0 0 24 24">
+											<path id="infoOptSave_${plane.id}" fill="#666666" d="${getSvgPath("bookmark-outline")}">
+										</svg>
+									</div>
+								}
 							</div>
 						</div>
 					`
@@ -446,7 +449,7 @@
 		window.btnUserAccount.style.transform = show ? "scale(1, 1)" : "scale(0, 0)"
 
 		const style = window.btnUser.style
-		
+
 		style.width  = show ? "256px" : "40px"
 		style.height = show ? "256px" : "40px"
 		style.borderRadius = show ? "4px" : "2px"
