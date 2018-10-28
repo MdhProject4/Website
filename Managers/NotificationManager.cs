@@ -43,6 +43,9 @@ namespace ProjectFlight.Managers
 				if (changes > 0)
 					Console.WriteLine($"Removed {changes} invalid {(changes == 1 ? "notification" : "notifications")}");
 			}
+
+			// Crate web socket deliverer
+			WebSocketDeliverer.Create();
 		}
 
 		/// <summary>
