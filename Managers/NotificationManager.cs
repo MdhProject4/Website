@@ -94,10 +94,25 @@ namespace ProjectFlight.Managers
 			if (!notifications.Any())
 				return;
 
+			// Update airport cache
+			UpdateAirportCache(notifications);
+
 			// Loop through notifications to try and find matches
 			foreach (var notification in notifications)
 			{
-				// TODO
+				// Get flight info
+				// TODO: This could be slow
+				var info = GetFlightInfo(notification.FlightId);
+
+				// Get time remaining
+				var distance = Maps.GetDistance(new Coordinate(info.Longitude, info.Latitude), airports[info.DestinationId]);
+				var hours = distance / info.SpeedKm;
+
+				// See if we should remind
+				if (hours < 1)
+				{
+					// TODO (when web socket code is done)
+				}
 			}
 		}
 
