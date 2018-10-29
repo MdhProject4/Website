@@ -66,6 +66,7 @@ namespace ProjectFlight.Managers
 			// TODO: For now, always respond with OK
 			var ok = Encoding.ASCII.GetBytes("OK");
 
+			// Loop and keep the connection running
 			while (!result.CloseStatus.HasValue)
 			{
 				await webSocket.SendAsync(
@@ -74,7 +75,16 @@ namespace ProjectFlight.Managers
 					result.EndOfMessage,
 					CancellationToken.None);
 
-				result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+				try
+				{
+					result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+				}
+				catch (WebSocketException e)
+				{
+					Console.WriteLine($"WebSocket ConnectionLost: {username} ({e.Message})");
+					users.Remove(username);
+					return;
+				}
 			}
 
 			// Close handshake
@@ -82,6 +92,7 @@ namespace ProjectFlight.Managers
 
 			// Log
 			Console.WriteLine($"WebSocket Disconnection: {username}");
+			users.Remove(username);
 		}
 
 		/// <summary>
