@@ -7,8 +7,6 @@ namespace ProjectFlight.Controllers
 {
 	public class HomeController : Controller
 	{
-		private ApplicationDbContext context;
-
 		/// <summary>
 		/// Get all known countries
 		/// </summary>
@@ -31,9 +29,6 @@ namespace ProjectFlight.Controllers
 			// Remove duplicates and sort them
 			return all.Distinct().OrderBy(f => f);
 		}
-
-		public HomeController(ApplicationDbContext context) => 
-		    this.context = context;
 
 		public IActionResult Index() => 
 			View(HttpContext);

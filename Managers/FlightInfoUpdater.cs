@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ProjectFlight.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectFlight.Data
+namespace ProjectFlight.Managers
 {
 	/// <summary>
 	/// Updates the flight info database in the background
@@ -22,13 +23,8 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// When the flight infos gets updated
 		/// </summary>
-		/// <param name="amount">Amount of flights that got updated</param>
-		public delegate void RefreshEvent(int amount);
-
-		/// <summary>
-		/// When the initial flight infos gets replaced
-		/// </summary>
-		public event AddEvent OnAdd;
+		/// <param name="refreshed">Flights that got updated</param>
+		public delegate void RefreshEvent(FlightInfo[] refreshed);
 
 		/// <summary>
 		/// When the flight infos gets updated
@@ -70,7 +66,13 @@ namespace ProjectFlight.Data
 		public FlightInfoUpdater(TimeSpan refreshDelay)
         {
 	        delay = refreshDelay;
-            Task.Run(() => UpdateFlightInfos());
+
+	        // Overwrite all current entries
+			Console.Write("Updating flight infos... ");
+	        Overwrite();
+	        Console.WriteLine("Close enough!");
+
+			Task.Run(() => UpdateFlightInfos());
         }
 		
 		/// <summary>
@@ -83,9 +85,6 @@ namespace ProjectFlight.Data
 		/// </summary>
 		private void UpdateFlightInfos()
 		{
-            // First overwrite all current entries
-            Overwrite();
-
             // Start refresh loop
 			running = true;
             while (running)
@@ -105,9 +104,6 @@ namespace ProjectFlight.Data
 
 	        // Save to database and overwrite current entries
 			WriteChanges(infos, true);
-
-			// Trigger OnAdd event
-			OnAdd?.Invoke(infos.Count);
 		}
 
         /// <summary>
@@ -119,13 +115,12 @@ namespace ProjectFlight.Data
 			// We convert it to a dictionary to search in it faster
             var newFlights = FlightInfoResponses.ToDictionary(f => f.Icao);
 
-			// Changes made to the database
-	        int changes;
+			// List with all updated values
+			var updates = new List<FlightInfo>();
 
             using (var context = new ApplicationDbContext())
             {
 				// Loop through all existing planes and try to update them
-
 	            foreach (var info in context.FlightInfos)
 	            {
 		            // Try to find it in the list of all flights
@@ -133,19 +128,25 @@ namespace ProjectFlight.Data
 		            {
 						// Get the new value
 			            var updated = newFlights[info.Id];
+						
+			            if (Math.Abs(info.Latitude - updated.Lat) > 0.001f || Math.Abs(info.Longitude - updated.Long) > 0.001f)
+			            {
+							// Update position
+				            info.Latitude  = updated.Lat;
+				            info.Longitude = updated.Long;
 
-						// For now at least, only update position
-			            info.Latitude  = updated.Lat;
-			            info.Longitude = updated.Long;
+				            // Add to updates list
+				            updates.Add(info);
+			            }
 		            }
 	            }
 
 				// Update database
-	            changes = context.SaveChanges();
+	            context.SaveChanges();
             }
 
 			// Trigger OnRefresh event
-			OnRefresh?.Invoke(changes);
+			OnRefresh?.Invoke(updates.ToArray());
         }
 
         /// <summary>
@@ -170,10 +171,11 @@ namespace ProjectFlight.Data
                         info.Tracked = TimeSpan.Parse("23:59:59.9999999");
 
 					// Make sure it can be added to the database
-	                var errors = info.Validate();
+	                var errors = info.Validate().ToArray();
+
 					// TODO: For now, throw an exception
 	                if (errors.Any())
-		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields");
+		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields ({string.Join(" ", errors)})");
 
 	                context.FlightInfos.Add(info);
                 }

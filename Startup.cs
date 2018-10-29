@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFlight.Data;
+using ProjectFlight.Managers;
 using System;
-using System.Data.SqlClient;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Linq;
 
 namespace ProjectFlight
 {
@@ -41,15 +42,8 @@ namespace ProjectFlight
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 			// Check database
-	        try
-	        {
-		        using (var context = new ApplicationDbContext())
-			        context.Database.EnsureCreated();
-	        }
-	        catch (SqlException e)
-	        {
-				Console.WriteLine($"SQL Error: {e.Message}");
-	        }
+			using (var context = new ApplicationDbContext())
+				context.Database.EnsureCreated();
 
 	        if (env.IsDevelopment())
 		        app.UseDeveloperExceptionPage();
@@ -69,14 +63,24 @@ namespace ProjectFlight
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+			// Setup WebSockets for notification delivery
+	        app.UseWebSockets();
+	        app.Use(async (context, next) => await WebSocketDeliverer.Handle(context, next));
 	        
 			// Start updating database
-			// TODO: Instead of logging to console, use proper ASP.NET logger
 			var updater = new FlightInfoUpdater(TimeSpan.FromSeconds(5));
 
 			// Subscribe to some testing events
-	        updater.OnAdd     += amount => Console.WriteLine($"Added {amount} flight infos");
-	        updater.OnRefresh += amount => Console.WriteLine($"Refreshed {amount} flight infos");
+	        // TODO: Instead of logging to console, use proper ASP.NET logger
+	        updater.OnRefresh += updates =>
+	        {
+		        NotificationManager.Update(updates);
+		        Console.WriteLine($"Refreshed {updates.Length} flight infos");
+	        };
+
+			// Create notification manager
+			NotificationManager.Create();
         }
     }
 }

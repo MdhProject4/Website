@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net;
+using Newtonsoft.Json;
 
-namespace ProjectFlight.Data
+namespace ProjectFlight.Managers
 {
 	/// <summary>
 	/// Coordinates for longitude and latitude

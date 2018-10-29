@@ -143,6 +143,7 @@ namespace ProjectFlight.Data
 			/*
 			 * If length is 2: <code> <city>, <country>
 			 * If length is 3: <code> <airport>, <city>, <country>
+			 * If length is 4: <code> <airport>, <city1>, <city2>, <country>
 			 */
 
 			switch (i.Length)
@@ -150,6 +151,7 @@ namespace ProjectFlight.Data
 				// If it's not city, assume country
 				case 2: return type == LocationInfo.City ? i[0].Substring(4).Trim() : i[1].Trim();
 				case 3: return type == LocationInfo.City ? i[1].Trim()              : i[2].Trim();
+				case 4: return type == LocationInfo.City ? $"{i[1]}, {i[2]}".Trim() : i[3].Trim();
 
 				// If not 2 or 3, something is wrong
 				default: return null;
@@ -175,7 +177,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Departure ID. Null if <see cref="Departure"/> is null
 		/// </summary>
-		public string DepartureId => Departure.Split(' ')[0];
+		public string DepartureId => Departure?.Split(' ')[0];
 
 		/// <summary>
 		/// Code and name of destination airport
@@ -196,7 +198,7 @@ namespace ProjectFlight.Data
 		/// <summary>
 		/// Destination ID. Null if <see cref="Departure"/> is null
 		/// </summary>
-		public string DestinationId => Destination.Split(' ')[0];
+		public string DestinationId => Destination?.Split(' ')[0];
 
 		/// <summary>
 		/// If the aircraft is grounded
