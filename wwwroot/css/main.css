@@ -134,6 +134,10 @@ body {
 .accTabContent {
 	display: none;
 }
+#accLogout {
+	text-decoration: underline;
+	cursor: pointer;
+}
 
 .accNotification {
 	background-color: #e0e0e0;

@@ -90,6 +90,16 @@ namespace ProjectFlight.Controllers
         }
 
 		/// <summary>
+		/// Tries to logout the current user
+		/// </summary>
+		/// <returns>JSON response with error (always false)</returns>
+		public IActionResult Logout()
+		{
+			SessionManager.Remove(HttpContext);
+			return GetResult(false);
+		}
+
+		/// <summary>
 		/// Tries to create an account
 		/// </summary>
 		/// <param name="username">User's requested username</param>
@@ -179,7 +189,7 @@ namespace ProjectFlight.Controllers
 			var added = false;
 
 			// See if we already have an entry
-			var entry = dbContext.FlightNotifications.FirstOrDefault(f => f.FlightId == id);
+			var entry = dbContext.FlightNotifications.FirstOrDefault(f => f.FlightId == id && f.Username == username);
 
 			// If found, delete it, else, add a new one
 			if (entry != default(FlightNotification))
