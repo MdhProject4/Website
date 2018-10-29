@@ -97,6 +97,10 @@ namespace ProjectFlight.Managers
 				// Loop through notifications to try and find matches
 				foreach (var notification in notifications)
 				{
+					// If already notified, ignore
+					if (notification.Notified)
+						continue;
+
 					// Get flight info
 					var info = infos.FirstOrDefault(f => f.Id == notification.FlightId);
 
