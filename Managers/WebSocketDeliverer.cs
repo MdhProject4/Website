@@ -46,13 +46,18 @@ namespace ProjectFlight.Managers
 		/// <param name="webSocket">Incoming web socket</param>
 		private static async Task Respond(HttpContext context, WebSocket webSocket)
 		{
-			// Generous 16 byte buffer
-			var buffer = new byte[16];
-
 			// Get user
 			var username = SessionManager.Get(context);
 
+			// Check if user was found
+			if (username == null)
+				return;
+
+			// Generous 16 byte buffer
+			var buffer = new byte[16];
+
 			// Save client
+			Console.WriteLine($"WebSocket Connection: {username}");
 			users[username] = webSocket;
 
 			// Get response from client
@@ -74,6 +79,9 @@ namespace ProjectFlight.Managers
 
 			// Close handshake
 			await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+
+			// Log
+			Console.WriteLine($"WebSocket Disconnection: {username}");
 		}
 
 		/// <summary>
