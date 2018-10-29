@@ -535,8 +535,7 @@
                             addText(window.accountBookmarks, "No bookmarks :(", "accInfo")
                         } else {
                             json.forEach(item => {
-                                fetch(`/api/getFlight?id=${item.flightId}`)
-                                    .then(addAccountBookmark(item.flightId))
+                                (addAccountBookmark(item.id))
                                     
                             })
                         }
@@ -764,19 +763,19 @@
 
         // Plane icon
         const icBookmark = document.createElement("img")
-        icBookmark.src = "/img/airplane.svg"
+        icBookmark.src = "/img/bookmark.svg"
         icBookmark.addEventListener("click", () => getFlight(id, "#ffffff"))
         bookmark.appendChild(icBookmark)
 
         // Text
         const info = document.createElement("span")
-        info.innerHTML = `${id}<br>Plane:${flightId} from ${departureCity} to ${destinationCity}`
+        info.innerHTML = `Plane:${id} <br> to  `
         bookmark.appendChild(info)
 
         // Delete icon
         const icDelete = document.createElement("img")
         icDelete.src = "/img/delete.svg"
-        icDelete.addEventListener("click", () => savePlane(id))
+        icDelete.addEventListener("click", () => notifyPlane(id))
         bookmark.appendChild(icDelete)
 
         // Add bookmark to container
