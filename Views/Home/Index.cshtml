@@ -924,8 +924,6 @@
 					document.getElementById('tableOperator').innerText    = item.info.operator
 					document.getElementById('tableInAir').innerText       = item.info.grounded ? "No" : "Yes"
 
-
-
 					for (let i = 0; i < planes.length; i++) {
 						if (planes[i].id === id ) {
 							const icon = planes[i].getIcon()
@@ -942,6 +940,7 @@
 					clearSidebarInfo()
 				}
 			});
+			
 		function clearSidebarInfo() {
 			document.getElementById('tableId').innerText = ''
 			document.getElementById('tableRegNum').innerText = ''
