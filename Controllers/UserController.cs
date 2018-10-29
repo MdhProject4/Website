@@ -133,7 +133,7 @@ namespace ProjectFlight.Controllers
 		/// </summary>
 		/// <param name="flightId">Flight ID to save</param>
 		/// <returns>JSON response with error</returns>
-		public IActionResult SaveFlight(string flightId)
+		public IActionResult ToggleFlight(string id)
 	    {
 		    // Try to get the user associated with the username
 		    var user = dbContext.Users.FirstOrDefault(u => u.Username == SessionManager.Get(HttpContext));
@@ -146,7 +146,7 @@ namespace ProjectFlight.Controllers
 		    var bookmark = new FlightBookmark
 		    {
 			    Username = user.Username,
-			    SavedId = flightId
+			    SavedId = id
 		    };
 
 		    // Try to add it to the database

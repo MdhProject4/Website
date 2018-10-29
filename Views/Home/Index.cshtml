@@ -514,7 +514,24 @@
 									.then(json2 => addAccountNotification(item.flightId, json2.time))
 							})
 						}
-					})
+                    })
+                break
+            case 1:
+                removeChildren(window.accountBookmarks)
+                fetch("/user/GetSavedFlights")
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json.length <= 0) {
+                            addText(window.accountBookmarks, "No bookmarks :(", "accInfo")
+                        } else {
+                            json.forEach(item => {
+                                fetch(`/api/getFlight?id=${item.flightId}`)
+                                    .then(addAccountBookmark(item.flightId))
+                                    
+                            })
+                        }
+                    })
+                break
 		}
 	}
 
@@ -665,8 +682,22 @@
 	}
 
 	// Toggle plane bookmark
-	function savePlane(id)
-	{
+    function savePlane(id)
+    {
+        // Toggle notification
+        fetch(`user/ToggleFlight?id=${id}`)
+            .then(response => response.json())
+            .then(json => {
+                // Change icon (if shown) depending on if it was added or removed
+                const icon = document.getElementById(`infoOptSave_${id}`)
+                if (icon) {
+                    icon.setAttribute("d", json.added ? getSvgPath("bookmark") : getSvgPath("bookmark-outline"))
+                }
+
+                // Refresh notifications
+                updateAccountTab(1)
+            })
+            .catch(error => console.log(error))
 		// For now, just change the icon
 		document.getElementById(`infoOptSave_${id}`).setAttribute("d", getSvgPath("bookmark"))
 	}
@@ -704,7 +735,33 @@
 
 		// Add notification to container
 		window.accountNotifications.appendChild(notif)
-	}
+    }
+
+    function addAccountBookmark(id) {
+        // Main notification container
+        const bookmark = document.createElement("div")
+        bookmark.className = "accBookmark"
+
+        // Plane icon
+        const icBookmark = document.createElement("img")
+        icBookmark.src = "/img/airplane.svg"
+        icBookmark.addEventListener("click", () => getFlight(id, "#ffffff"))
+        bookmark.appendChild(icBookmark)
+
+        // Text
+        const info = document.createElement("span")
+        info.innerHTML = `${id}<br>Plane:${flightId} from ${departureCity} to ${destinationCity}`
+        bookmark.appendChild(info)
+
+        // Delete icon
+        const icDelete = document.createElement("img")
+        icDelete.src = "/img/delete.svg"
+        icDelete.addEventListener("click", () => savePlane(id))
+        bookmark.appendChild(icDelete)
+
+        // Add bookmark to container
+        window.accountBookmarks.appendChild(bookmark)
+    }
 
 	// Neater way get svg paths
 	function getSvgPath(icon)
