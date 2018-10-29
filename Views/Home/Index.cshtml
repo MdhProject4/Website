@@ -166,7 +166,11 @@
 			</div>
 			<!-- Settings -->
 			<div id="accountSettings" class="accTabContent">
-				<span class="accInfo"> Welcome @user?.Username! <br> @(user?.IsPremium ?? false ? "Premium" : "Free") account </span>
+				<span class="accInfo">
+					Welcome @user?.Username! <br>
+					@(user?.IsPremium ?? false ? "Premium" : "Free") account <br> <br>
+					<span id="accLogout" onclick="logout()"> Get me out of here </span>
+				</span>
 			</div>
 		</div>
 	</div>
@@ -623,6 +627,13 @@
 					location.reload(true)
 				}
 			})
+	}
+
+	// Logs out
+	function logout()
+	{
+		fetch("/user/logout")
+			.then(response => location.reload(true))
 	}
 
 	// Shows the register or login dialog

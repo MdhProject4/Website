@@ -90,6 +90,16 @@ namespace ProjectFlight.Controllers
         }
 
 		/// <summary>
+		/// Tries to logout the current user
+		/// </summary>
+		/// <returns>JSON response with error (always false)</returns>
+		public IActionResult Logout()
+		{
+			SessionManager.Remove(HttpContext);
+			return GetResult(false);
+		}
+
+		/// <summary>
 		/// Tries to create an account
 		/// </summary>
 		/// <param name="username">User's requested username</param>
