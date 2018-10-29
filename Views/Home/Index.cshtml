@@ -502,7 +502,21 @@
 								.then(response => response.json())
 								.then(json2 => addAccountNotification(item.flightId, json2.time))
 						})
-					})
+                    })
+                break
+
+            case 1:
+                removeChildren(window.accountBookmarks)
+                fetch("/user/getBookmarks")
+                    .then(response => response.json())
+                    .then(json => {
+                        json.forEach(item => {
+                            fetch(`/api/getFlightRemaining?id=${item.flightId}`)
+                                .then(response => response.json())
+                                .then(json2 => addAccountNotification(item.flightId, json2.time))
+                        })
+                    })
+                break
 		}
 	}
 
@@ -641,7 +655,15 @@
 
 	// Toggle plane bookmark
 	function savePlane(id)
-	{
+    {
+        // Try to add nbookmark
+        fetch(`user/addBookmark?id=${id}`)
+            .then(response => response.json())
+            .then(json => {
+                console.log(json)
+            })
+            .catch(error => console.log(error))
+
 		// For now, just change the icon
 		document.getElementById(`infoOptSave_${id}`).setAttribute("d", getSvgPath("bookmark"))
 	}
@@ -883,7 +905,32 @@
 					document.getElementById('tableOperator').innerText    = ''
 					document.getElementById('tableInAir').innerText       = ''
 				}
-			});
+            });
+
+       
+        function addBookmark(id, time) {
+            // Marker
+            const mark = document.createElement("div")
+            mark.className = "usersBookmark"
+
+            // Plane icon
+            const bookmark = document.createElement("img")
+            bookmark.src = "/img/Bookmark"
+            mark.appendChild(icPlane)
+
+            // Text
+            const info = document.createElement("span")
+            info.innerHTML = `${id}<br>${time} remaining`
+            mark.appendChild(info)
+
+            // Delete icon
+            const icDelete = document.createElement("img")
+            icDelete.src = "/img/delete.svg"
+            mark.appendChild(icDelete)
+
+            // Add notification to container
+            window.accountBookmarks.appendChild(bookmark)
+        }
 
 	}
 </script>
