@@ -381,11 +381,13 @@
 				`
 					<div class="flightInfoWindow">
 						<span> ${info.id}: ${info.name} </span>
-						<div title="Toggle bookmark" class="infoOptSave" onclick="saveAirport('${info.id}')">
-							<svg viewBox="0 0 24 24">
-								<path id="infoOptAirport_${info.id}" fill="#666666" d="${getSvgPath("bookmark-outline")}">
-							</svg>
-						</div>
+						@if (signedIn) {
+							<div title="Toggle bookmark" class="infoOptSave" onclick="saveAirport('${info.id}')">
+								<svg viewBox="0 0 24 24">
+									<path id="infoOptAirport_${info.id}" fill="#666666" d="${getSvgPath("bookmark-outline")}">
+								</svg>
+							</div>
+						}
 					</div>
 				`
 		})
