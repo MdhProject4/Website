@@ -224,6 +224,7 @@
 	let map, places
 	let planes = []
 
+	// Loads the map after the Google API finishes loading
 	function loadMap()
 	{
 		map = new window.google.maps.Map(window.map,
@@ -331,6 +332,7 @@
 		planes.push(marker)
 	}
 
+	// Opens an airplane info window
 	function openInfoWindow(infoWindow, marker, info)
 	{
 		// Open the info window itself
@@ -374,6 +376,7 @@
 		})
 	}
 
+	// Add airport marker
 	function addAirport(path, info)
 	{
 		const infoWindow = new window.google.maps.InfoWindow({
@@ -496,6 +499,7 @@
 		}
 	}
 
+	// Update the content in the specific account tab
 	function updateAccountTab(index)
 	{
 		switch (index)
@@ -520,6 +524,7 @@
 		}
 	}
 
+	// Generic function to remove all children from an element
 	function removeChildren(element)
 	{
 		while (element.firstChild) {
@@ -554,6 +559,7 @@
 		}
 	}
 
+	// Tries to create an acccount
 	function register()
 	{
 		// Get entered username, password and email
@@ -587,6 +593,7 @@
 			})
 	}
 
+	// Tries to login
 	function login()
 	{
 		// Get entered username and password
@@ -730,7 +737,7 @@
 		}
 	}
 
-	
+	// Searches for a place and returns the coordinates
 	function searchPlace(query)
 	{
 		const request = {
@@ -755,6 +762,7 @@
 		})
 	}
 
+	// Test function to print result of searchPlace to the console
 	function searchPlaceDebug(query)
 	{
 		searchPlace(query)
@@ -858,11 +866,14 @@
 </script>
 
 <script>
+	// Open side search menu
 	function openNavmenu()
 	{
 		document.getElementById("mySidenavmenu").style.width    = "370px"
 		document.getElementById("searchKlick").style.visibility = "hidden"
 	}
+
+	// Close side search menu
 	function closeNav()
 	{
 		document.getElementById("mySidenavmenu").style.width    = "0"
@@ -871,7 +882,7 @@
 </script>
 
 <script>
-
+	// Locate a specific plane on the map
 	function getFlight(id, color)
 	{
 		// If not set, default to text entered in search input
