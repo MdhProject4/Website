@@ -11,7 +11,6 @@ namespace ProjectFlight
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
-				.ConfigureAppConfiguration((context, builder) => { builder.AddJsonFile("connection.json"); })
 				.UseStartup<Startup>();
 	}
 }
