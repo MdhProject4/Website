@@ -649,7 +649,7 @@
 	function logout()
 	{
 		fetch("/user/logout")
-			.then(response => location.reload(true))
+			.then(() => location.reload(true))
 	}
 
 	// Shows the register or login dialog
