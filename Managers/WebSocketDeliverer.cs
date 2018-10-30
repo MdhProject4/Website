@@ -32,6 +32,7 @@ namespace ProjectFlight.Managers
 			if (context.Request.Path == "/ws" && context.WebSockets.IsWebSocketRequest)
 			{
 				// Respond to it (upgrade tcp to web socket)
+				// TODO: We could do user check here
 				var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 				await Respond(context, webSocket);
 			}
@@ -50,6 +51,7 @@ namespace ProjectFlight.Managers
 			var username = SessionManager.Get(context);
 
 			// Check if user was found
+			// TODO: This crashes the client
 			if (username == null)
 				return;
 
