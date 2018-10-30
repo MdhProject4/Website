@@ -535,8 +535,8 @@
                             addText(window.accountBookmarks, "No bookmarks :(", "accInfo")
                         } else {
                             json.forEach(item => {
-                                (addAccountBookmark(item.id))
-                                    
+                                
+                                
                             })
                         }
                     })
@@ -763,19 +763,19 @@
 
         // Plane icon
         const icBookmark = document.createElement("img")
-        icBookmark.src = "/img/bookmark.svg"
+        icBookmark.src = "/img/airplane.svg"
         icBookmark.addEventListener("click", () => getFlight(id, "#ffffff"))
         bookmark.appendChild(icBookmark)
 
         // Text
         const info = document.createElement("span")
-        info.innerHTML = `Plane:${id} <br> to  `
+        info.innerHTML = `Plane:${id.}`
         bookmark.appendChild(info)
 
         // Delete icon
         const icDelete = document.createElement("img")
         icDelete.src = "/img/delete.svg"
-        icDelete.addEventListener("click", () => notifyPlane(id))
+        icDelete.addEventListener("click", () => removeChild(id))
         bookmark.appendChild(icDelete)
 
         // Add bookmark to container
