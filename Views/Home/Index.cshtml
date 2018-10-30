@@ -535,8 +535,7 @@
                             addText(window.accountBookmarks, "No bookmarks :(", "accInfo")
                         } else {
                             json.forEach(item => {
-                                addAccountBookmark(item.id)
-                                
+                                addAccountBookmark(item[2])
                             })
                         }
                     })
@@ -703,7 +702,7 @@
 	// Toggle plane bookmark
     function savePlane(id)
     {
-        // Toggle notification
+        // Toggle bookmark
         fetch(`user/ToggleFlight?id=${id}`)
             .then(response => response.json())
             .then(json => {
