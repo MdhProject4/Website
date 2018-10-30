@@ -273,31 +273,31 @@ namespace ProjectFlight.Data
 			var errors = new List<string>();
 			
 			if (Id.Length > 6)
-				errors.Add("Id");
+				errors.Add($"Id({Id.Length})");
 
 			if (RegistrationNumber?.Length > 24)
-				errors.Add("RegistrationNumber");
+				errors.Add($"RegistrationNumber({RegistrationNumber.Length})");
 
 			if (Model?.Length > 16)
-				errors.Add("Model");
+				errors.Add($"Model({Model.Length})");
 
 			if (ModelDescription?.Length > 64)
-				errors.Add("ModelDescription");
+				errors.Add($"ModelDescription({ModelDescription.Length})");
 
 			if (Manufacturer?.Length > 32)
-				errors.Add("Manufacturer");
+				errors.Add($"Manufacturer({Manufacturer.Length})");
 
 			if (Operator?.Length > 192)
-				errors.Add("Operator");
+				errors.Add($"Operator({Operator.Length})");
 
 			if (Departure?.Length > 96)
-				errors.Add("Departure");
+				errors.Add($"Departure({Departure.Length})");
 
 			if (Destination?.Length > 96)
-				errors.Add("Destination");
+				errors.Add($"Destination({Destination.Length})");
 
 			if (CallSign?.Length > 128)
-				errors.Add("CallSign");
+				errors.Add($"CallSign({CallSign.Length})");
 
 			return errors;
 		}

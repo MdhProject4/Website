@@ -68,9 +68,8 @@ namespace ProjectFlight.Managers
 	        delay = refreshDelay;
 
 	        // Overwrite all current entries
-			Console.Write("Updating flight infos... ");
+			Console.WriteLine("Updating flight infos... ");
 	        Overwrite();
-	        Console.WriteLine("Close enough!");
 
 			Task.Run(() => UpdateFlightInfos());
         }
@@ -173,11 +172,11 @@ namespace ProjectFlight.Managers
 					// Make sure it can be added to the database
 	                var errors = info.Validate().ToArray();
 
-					// TODO: For now, throw an exception
+					// TODO: For now, ignore saving
 	                if (errors.Any())
-		                throw new InvalidOperationException($"Can't add {info.Id} due to invalid fields ({string.Join(" ", errors)})");
-
-	                context.FlightInfos.Add(info);
+		                Console.WriteLine($"Warning: Not saving {info.Id} due to invalid fields ({string.Join(" ", errors)})");
+					else
+		                context.FlightInfos.Add(info);
                 }
 
 				context.SaveChanges();
