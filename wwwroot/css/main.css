@@ -171,10 +171,18 @@ body {
     margin-bottom: 8px;
 }
 
-    .accBookmark span {
-        font-size: 12px;
-        color: #666666;
-    }
+.accBookmark span {
+    font-size: 12px;
+    color: #666666;
+}
+
+.accBookmark img {
+    width: 18px;
+    height: 18px;
+    margin: 11px;
+    cursor: pointer;
+}
+
 .accNotification img {
 	width: 18px;
 	height: 18px;
